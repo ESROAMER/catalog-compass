@@ -1,0 +1,1053 @@
+{
+  "schema_version": 1,
+  "evaluation_kind": "sample_smoke_check",
+  "status": "complete",
+  "started_at": "2026-10-15T16:47:20+08:00",
+  "timezone": "Asia/Shanghai (UTC+08:00)",
+  "limitations": [
+    "These four familiar public/synthetic samples are smoke checks, not a held-out benchmark or an estimate of generalization accuracy.",
+    "Field-match counts include correctly absent (null) columns; they do not measure catalog issue-detection accuracy.",
+    "CrossPeak problem examples contain issue hints in names/SKUs and must not support an AI accuracy claim.",
+    "raw_model_mapping is the adapter-validated suggestion before human correction, not the raw HTTP/token response. Invalid/duplicate suggestions may have been replaced with null; see model_response.warnings.",
+    "Rule reports use the human expected mapping, independently of the model suggestion. Rules never infer missing prices or modify source records.",
+    "One sequential inference is run per sample; latency includes local warmup/load effects and is not a performance benchmark."
+  ],
+  "environment": {
+    "python_version": "3.13.11",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "model_endpoint": "http://127.0.0.1:8766/v1",
+    "model_status_at_start": {
+      "ready": true,
+      "name": "catalog-qwen",
+      "backend": "llama.cpp (local)",
+      "message": "Local model is ready. Only column headers and up to three sample values per column are sent to it."
+    },
+    "source_sha256": {
+      "catalog_check/model.py": "7ea7e5bc516fc480fc90affbaffaec4c6b5e709a533396a0f2b2cc38c7d8fce5",
+      "catalog_check/catalog.py": "4cfb16d3be02ca9104f1fe739bf904aa3d83e97145e2a8750c9abf6a9d0cc40e",
+      "catalog_check/samples.py": "8566a7c4055d7f59f51e4d5ba0d9ef360721598064aebc63aeb6f4325cfb01f2",
+      "scripts/evaluate_model.py": "97d5ae185680bfadd1afb321d8aa1b5124f5ba6fc0c17a6dc605c9a07fea73e2"
+    }
+  },
+  "samples": [
+    {
+      "sample_id": "supplier-demo",
+      "sample_description": "10 synthetic rows with unfamiliar headers, a missing price, a duplicate and conflicts. No customer data.",
+      "filename": "synthetic-supplier-demo.csv",
+      "csv_utf8_sha256": "fa4b672b6eeb27f6d0ba290aea627c86157955b31ab0c014556e459cc76f9fd9",
+      "evaluated_at": "2026-10-15T16:47:21+08:00",
+      "row_count": 10,
+      "column_count": 8,
+      "headers": [
+        "Item ref",
+        "Display label",
+        "List amount",
+        "Deal amount",
+        "Money",
+        "Units available",
+        "GTIN",
+        "Kind"
+      ],
+      "human_expected_mapping": {
+        "sku": "Item ref",
+        "name": "Display label",
+        "regular_price": "List amount",
+        "sale_price": "Deal amount",
+        "currency": "Money",
+        "product_type": "Kind",
+        "parent_sku": null,
+        "barcode": "GTIN",
+        "stock": "Units available",
+        "description": null
+      },
+      "raw_model_mapping": {
+        "sku": "Item ref",
+        "name": "Display label",
+        "regular_price": "List amount",
+        "sale_price": "Deal amount",
+        "currency": "Money",
+        "product_type": "Kind",
+        "parent_sku": "GTIN",
+        "barcode": null,
+        "stock": "Units available",
+        "description": null
+      },
+      "matching_fields": 8,
+      "total_fields": 10,
+      "matching_present_fields": 7,
+      "total_present_fields": 8,
+      "differences": [
+        {
+          "field": "parent_sku",
+          "expected": null,
+          "suggested": "GTIN"
+        },
+        {
+          "field": "barcode",
+          "expected": "GTIN",
+          "suggested": null
+        }
+      ],
+      "elapsed_ms": 604,
+      "usage": {
+        "completion_tokens": 84,
+        "prompt_tokens": 512,
+        "total_tokens": 596,
+        "prompt_tokens_details": {
+          "cached_tokens": 511
+        }
+      },
+      "model_response": {
+        "mapping": {
+          "sku": "Item ref",
+          "name": "Display label",
+          "regular_price": "List amount",
+          "sale_price": "Deal amount",
+          "currency": "Money",
+          "product_type": "Kind",
+          "parent_sku": "GTIN",
+          "barcode": null,
+          "stock": "Units available",
+          "description": null
+        },
+        "suggestions": [
+          {
+            "field": "sku",
+            "column": "Item ref",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "name",
+            "column": "Display label",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "regular_price",
+            "column": "List amount",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "sale_price",
+            "column": "Deal amount",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "currency",
+            "column": "Money",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "product_type",
+            "column": "Kind",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "parent_sku",
+            "column": "GTIN",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "stock",
+            "column": "Units available",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          }
+        ],
+        "engine": {
+          "kind": "open_model",
+          "name": "catalog-qwen",
+          "elapsed_ms": 604,
+          "usage": {
+            "completion_tokens": 84,
+            "prompt_tokens": 512,
+            "total_tokens": 596,
+            "prompt_tokens_details": {
+              "cached_tokens": 511
+            }
+          }
+        },
+        "warnings": [
+          "Review barcode: the model suggested an invalid or already-used column.",
+          "Review description: the model suggested an invalid or already-used column."
+        ]
+      },
+      "rule_report_with_human_mapping": {
+        "summary": {
+          "total_rows": 10,
+          "error_count": 4,
+          "warning_count": 6,
+          "affected_rows": 9,
+          "assumed_simple_rows": 0
+        },
+        "issues": [
+          {
+            "id": "issue-0001",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 3,
+            "field": "regular_price",
+            "sku": "00082",
+            "message": "Regular price is required for simple products.",
+            "value": ""
+          },
+          {
+            "id": "issue-0002",
+            "code": "sku_price_conflict",
+            "severity": "error",
+            "row": 4,
+            "field": "regular_price",
+            "sku": "00083",
+            "message": "The same SKU has different regular price values in records 4, 5 (USD). Confirm which value is correct.",
+            "value": "32.00"
+          },
+          {
+            "id": "issue-0003",
+            "code": "sku_price_conflict",
+            "severity": "error",
+            "row": 5,
+            "field": "regular_price",
+            "sku": "00083",
+            "message": "The same SKU has different regular price values in records 4, 5 (USD). Confirm which value is correct.",
+            "value": "39.00"
+          },
+          {
+            "id": "issue-0004",
+            "code": "duplicate_sku",
+            "severity": "warning",
+            "row": 6,
+            "field": "sku",
+            "sku": "00084",
+            "message": "This SKU occurs more than once. No conflicting numeric prices within a currency or non-empty barcodes were detected for this record; review before importing.",
+            "value": "00084"
+          },
+          {
+            "id": "issue-0005",
+            "code": "duplicate_record",
+            "severity": "warning",
+            "row": 7,
+            "field": "sku",
+            "sku": "00084",
+            "message": "This entire source record is identical to record 6; neither record was removed.",
+            "value": "00084"
+          },
+          {
+            "id": "issue-0006",
+            "code": "duplicate_sku",
+            "severity": "warning",
+            "row": 7,
+            "field": "sku",
+            "sku": "00084",
+            "message": "This SKU occurs more than once. No conflicting numeric prices within a currency or non-empty barcodes were detected for this record; review before importing.",
+            "value": "00084"
+          },
+          {
+            "id": "issue-0007",
+            "code": "sale_above_regular",
+            "severity": "warning",
+            "row": 8,
+            "field": "sale_price",
+            "sku": "00085",
+            "message": "Sale price exceeds regular price.",
+            "value": "22.00"
+          },
+          {
+            "id": "issue-0008",
+            "code": "invalid_stock",
+            "severity": "warning",
+            "row": 9,
+            "field": "stock",
+            "sku": "00086",
+            "message": "Stock must be a non-negative whole number, blank, or 'parent' for inherited stock.",
+            "value": "four"
+          },
+          {
+            "id": "issue-0009",
+            "code": "zero_price",
+            "severity": "warning",
+            "row": 10,
+            "field": "regular_price",
+            "sku": "00087",
+            "message": "Price is zero; confirm that this product is free.",
+            "value": "0.00"
+          },
+          {
+            "id": "issue-0010",
+            "code": "missing_name",
+            "severity": "error",
+            "row": 11,
+            "field": "name",
+            "sku": "00088",
+            "message": "Product name is missing.",
+            "value": ""
+          }
+        ],
+        "notes": [
+          "Row numbers count CSV records, with the header as record 1; quoted multiline cells count once.",
+          "SKU comparisons use exact, case-sensitive source strings within this file; no rows are merged.",
+          "Original values are retained. CSV exports prefix risky text with an apostrophe to prevent spreadsheet formulas.",
+          "Prices accept a decimal point without currency symbols or thousands separators; ambiguous formats require review.",
+          "Blank currencies are compared only with other blank currencies. Confirm the file's currency before relying on price conflicts.",
+          "Unmapped fields are empty in normalized output: parent_sku, description."
+        ]
+      }
+    },
+    {
+      "sample_id": "woocommerce-official",
+      "sample_description": "25 public example records. Includes parent rows with legitimate blank prices. GPL-2.0-or-later.",
+      "filename": "woocommerce-official.csv",
+      "csv_utf8_sha256": "fd4067b91bb1e65e24525ea68128b5d74e1e695065584b2ee8766330a7cc430c",
+      "evaluated_at": "2026-10-15T16:47:30+08:00",
+      "row_count": 25,
+      "column_count": 51,
+      "headers": [
+        "ID",
+        "Type",
+        "SKU",
+        "Name",
+        "Published",
+        "Is featured?",
+        "Visibility in catalog",
+        "Short description",
+        "Description",
+        "Date sale price starts",
+        "Date sale price ends",
+        "Tax status",
+        "Tax class",
+        "In stock?",
+        "Stock",
+        "Backorders allowed?",
+        "Sold individually?",
+        "Weight (lbs)",
+        "Length (in)",
+        "Width (in)",
+        "Height (in)",
+        "Allow customer reviews?",
+        "Purchase note",
+        "Sale price",
+        "Regular price",
+        "Categories",
+        "Tags",
+        "Shipping class",
+        "Images",
+        "Download limit",
+        "Download expiry days",
+        "Parent",
+        "Grouped products",
+        "Upsells",
+        "Cross-sells",
+        "External URL",
+        "Button text",
+        "Position",
+        "Attribute 1 name",
+        "Attribute 1 value(s)",
+        "Attribute 1 visible",
+        "Attribute 1 global",
+        "Attribute 2 name",
+        "Attribute 2 value(s)",
+        "Attribute 2 visible",
+        "Attribute 2 global",
+        "Meta: _wpcom_is_markdown",
+        "Download 1 name",
+        "Download 1 URL",
+        "Download 2 name",
+        "Download 2 URL"
+      ],
+      "human_expected_mapping": {
+        "sku": "SKU",
+        "name": "Name",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "currency": null,
+        "product_type": "Type",
+        "parent_sku": "Parent",
+        "barcode": null,
+        "stock": "Stock",
+        "description": "Description"
+      },
+      "raw_model_mapping": {
+        "sku": "SKU",
+        "name": "Name",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "currency": "Categories",
+        "product_type": "Type",
+        "parent_sku": "Parent",
+        "barcode": null,
+        "stock": "Stock",
+        "description": "Description"
+      },
+      "matching_fields": 9,
+      "total_fields": 10,
+      "matching_present_fields": 8,
+      "total_present_fields": 8,
+      "differences": [
+        {
+          "field": "currency",
+          "expected": null,
+          "suggested": "Categories"
+        }
+      ],
+      "elapsed_ms": 9334,
+      "usage": {
+        "completion_tokens": 82,
+        "prompt_tokens": 1509,
+        "total_tokens": 1591,
+        "prompt_tokens_details": {
+          "cached_tokens": 282
+        }
+      },
+      "model_response": {
+        "mapping": {
+          "sku": "SKU",
+          "name": "Name",
+          "regular_price": "Regular price",
+          "sale_price": "Sale price",
+          "currency": "Categories",
+          "product_type": "Type",
+          "parent_sku": "Parent",
+          "barcode": null,
+          "stock": "Stock",
+          "description": "Description"
+        },
+        "suggestions": [
+          {
+            "field": "sku",
+            "column": "SKU",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "name",
+            "column": "Name",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "regular_price",
+            "column": "Regular price",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "sale_price",
+            "column": "Sale price",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "currency",
+            "column": "Categories",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "product_type",
+            "column": "Type",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "parent_sku",
+            "column": "Parent",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "stock",
+            "column": "Stock",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "description",
+            "column": "Description",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          }
+        ],
+        "engine": {
+          "kind": "open_model",
+          "name": "catalog-qwen",
+          "elapsed_ms": 9334,
+          "usage": {
+            "completion_tokens": 82,
+            "prompt_tokens": 1509,
+            "total_tokens": 1591,
+            "prompt_tokens_details": {
+              "cached_tokens": 282
+            }
+          }
+        },
+        "warnings": [
+          "Review barcode: the model suggested an invalid or already-used column."
+        ]
+      },
+      "rule_report_with_human_mapping": {
+        "summary": {
+          "total_rows": 25,
+          "error_count": 0,
+          "warning_count": 0,
+          "affected_rows": 0,
+          "assumed_simple_rows": 0
+        },
+        "issues": [],
+        "notes": [
+          "Row numbers count CSV records, with the header as record 1; quoted multiline cells count once.",
+          "SKU comparisons use exact, case-sensitive source strings within this file; no rows are merged.",
+          "Original values are retained. CSV exports prefix risky text with an apostrophe to prevent spreadsheet formulas.",
+          "Prices accept a decimal point without currency symbols or thousands separators; ambiguous formats require review.",
+          "Blank currencies are compared only with other blank currencies. Confirm the file's currency before relying on price conflicts.",
+          "Unmapped fields are empty in normalized output: currency, barcode."
+        ]
+      }
+    },
+    {
+      "sample_id": "crosspeak-good",
+      "sample_description": "31 public test records. Normal product and variant structures. GPL-2.0.",
+      "filename": "crosspeak-good.csv",
+      "csv_utf8_sha256": "04d12365a790eac18fb91bbe91d3dfca29fe72bd741601a7586cca6e24bc60aa",
+      "evaluated_at": "2026-10-15T16:47:35+08:00",
+      "row_count": 31,
+      "column_count": 56,
+      "headers": [
+        "Type",
+        "SKU",
+        "GTIN, UPC, EAN, or ISBN",
+        "Name",
+        "Published",
+        "Is featured?",
+        "Visibility in catalog",
+        "Short description",
+        "Description",
+        "Date sale price starts",
+        "Date sale price ends",
+        "Tax status",
+        "Tax class",
+        "In stock?",
+        "Stock",
+        "Low stock amount",
+        "Backorders allowed?",
+        "Sold individually?",
+        "Weight (kg)",
+        "Length (cm)",
+        "Width (cm)",
+        "Height (cm)",
+        "Allow customer reviews?",
+        "Purchase note",
+        "Sale price",
+        "Regular price",
+        "Categories",
+        "Tags",
+        "Shipping class",
+        "Images",
+        "Download limit",
+        "Download expiry days",
+        "Parent",
+        "Grouped products",
+        "Upsells",
+        "Cross-sells",
+        "External URL",
+        "Button text",
+        "Position",
+        "Brands",
+        "Attribute 1 name",
+        "Attribute 1 value(s)",
+        "Attribute 1 visible",
+        "Attribute 1 global",
+        "Attribute 1 default",
+        "Attribute 2 name",
+        "Attribute 2 value(s)",
+        "Attribute 2 visible",
+        "Attribute 2 global",
+        "Attribute 2 default",
+        "Download 1 ID",
+        "Download 1 name",
+        "Download 1 URL",
+        "Download 2 ID",
+        "Download 2 name",
+        "Download 2 URL"
+      ],
+      "human_expected_mapping": {
+        "sku": "SKU",
+        "name": "Name",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "currency": null,
+        "product_type": "Type",
+        "parent_sku": "Parent",
+        "barcode": "GTIN, UPC, EAN, or ISBN",
+        "stock": "Stock",
+        "description": "Description"
+      },
+      "raw_model_mapping": {
+        "sku": "SKU",
+        "name": "Name",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "currency": "Categories",
+        "product_type": "Type",
+        "parent_sku": "Parent",
+        "barcode": "GTIN, UPC, EAN, or ISBN",
+        "stock": "Stock",
+        "description": "Description"
+      },
+      "matching_fields": 9,
+      "total_fields": 10,
+      "matching_present_fields": 9,
+      "total_present_fields": 9,
+      "differences": [
+        {
+          "field": "currency",
+          "expected": null,
+          "suggested": "Categories"
+        }
+      ],
+      "elapsed_ms": 5249,
+      "usage": {
+        "completion_tokens": 91,
+        "prompt_tokens": 1678,
+        "total_tokens": 1769,
+        "prompt_tokens_details": {
+          "cached_tokens": 282
+        }
+      },
+      "model_response": {
+        "mapping": {
+          "sku": "SKU",
+          "name": "Name",
+          "regular_price": "Regular price",
+          "sale_price": "Sale price",
+          "currency": "Categories",
+          "product_type": "Type",
+          "parent_sku": "Parent",
+          "barcode": "GTIN, UPC, EAN, or ISBN",
+          "stock": "Stock",
+          "description": "Description"
+        },
+        "suggestions": [
+          {
+            "field": "sku",
+            "column": "SKU",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "name",
+            "column": "Name",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "regular_price",
+            "column": "Regular price",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "sale_price",
+            "column": "Sale price",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "currency",
+            "column": "Categories",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "product_type",
+            "column": "Type",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "parent_sku",
+            "column": "Parent",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "barcode",
+            "column": "GTIN, UPC, EAN, or ISBN",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "stock",
+            "column": "Stock",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "description",
+            "column": "Description",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          }
+        ],
+        "engine": {
+          "kind": "open_model",
+          "name": "catalog-qwen",
+          "elapsed_ms": 5249,
+          "usage": {
+            "completion_tokens": 91,
+            "prompt_tokens": 1678,
+            "total_tokens": 1769,
+            "prompt_tokens_details": {
+              "cached_tokens": 282
+            }
+          }
+        },
+        "warnings": []
+      },
+      "rule_report_with_human_mapping": {
+        "summary": {
+          "total_rows": 31,
+          "error_count": 0,
+          "warning_count": 6,
+          "affected_rows": 6,
+          "assumed_simple_rows": 0
+        },
+        "issues": [
+          {
+            "id": "issue-0001",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 20,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          },
+          {
+            "id": "issue-0002",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 21,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          },
+          {
+            "id": "issue-0003",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 22,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          },
+          {
+            "id": "issue-0004",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 23,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          },
+          {
+            "id": "issue-0005",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 24,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          },
+          {
+            "id": "issue-0006",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 25,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          }
+        ],
+        "notes": [
+          "Row numbers count CSV records, with the header as record 1; quoted multiline cells count once.",
+          "SKU comparisons use exact, case-sensitive source strings within this file; no rows are merged.",
+          "Original values are retained. CSV exports prefix risky text with an apostrophe to prevent spreadsheet formulas.",
+          "Prices accept a decimal point without currency symbols or thousands separators; ambiguous formats require review.",
+          "Blank currencies are compared only with other blank currencies. Confirm the file's currency before relying on price conflicts.",
+          "Unmapped fields are empty in normalized output: currency."
+        ]
+      }
+    },
+    {
+      "sample_id": "crosspeak-bad",
+      "sample_description": "30 intentionally flawed records. Names contain issue hints; use for rule checks, not an AI accuracy benchmark. GPL-2.0.",
+      "filename": "crosspeak-bad.csv",
+      "csv_utf8_sha256": "1c7a9f502bc94dbf0e720639ae2361e43a0ba8e9c7d1646e03f60c497886c19d",
+      "evaluated_at": "2026-10-15T16:47:36+08:00",
+      "row_count": 30,
+      "column_count": 50,
+      "headers": [
+        "Type",
+        "SKU",
+        "GTIN, UPC, EAN, or ISBN",
+        "Name",
+        "Published",
+        "Is featured?",
+        "Visibility in catalog",
+        "Short description",
+        "Description",
+        "Date sale price starts",
+        "Date sale price ends",
+        "Tax status",
+        "Tax class",
+        "In stock?",
+        "Stock",
+        "Low stock amount",
+        "Backorders allowed?",
+        "Sold individually?",
+        "Weight (kg)",
+        "Length (cm)",
+        "Width (cm)",
+        "Height (cm)",
+        "Allow customer reviews?",
+        "Purchase note",
+        "Sale price",
+        "Regular price",
+        "Categories",
+        "Tags",
+        "Shipping class",
+        "Images",
+        "Download limit",
+        "Download expiry days",
+        "Parent",
+        "Grouped products",
+        "Upsells",
+        "Cross-sells",
+        "External URL",
+        "Button text",
+        "Position",
+        "Brands",
+        "Attribute 1 name",
+        "Attribute 1 value(s)",
+        "Attribute 1 visible",
+        "Attribute 1 global",
+        "Attribute 2 name",
+        "Attribute 2 value(s)",
+        "Attribute 2 visible",
+        "Attribute 2 global",
+        "Attribute 1 default",
+        "Attribute 2 default"
+      ],
+      "human_expected_mapping": {
+        "sku": "SKU",
+        "name": "Name",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "currency": null,
+        "product_type": "Type",
+        "parent_sku": "Parent",
+        "barcode": "GTIN, UPC, EAN, or ISBN",
+        "stock": "Stock",
+        "description": "Description"
+      },
+      "raw_model_mapping": {
+        "sku": "SKU",
+        "name": "Name",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "currency": "Categories",
+        "product_type": "Type",
+        "parent_sku": "Parent",
+        "barcode": "GTIN, UPC, EAN, or ISBN",
+        "stock": "Stock",
+        "description": "Description"
+      },
+      "matching_fields": 9,
+      "total_fields": 10,
+      "matching_present_fields": 9,
+      "total_present_fields": 9,
+      "differences": [
+        {
+          "field": "currency",
+          "expected": null,
+          "suggested": "Categories"
+        }
+      ],
+      "elapsed_ms": 1217,
+      "usage": {
+        "completion_tokens": 91,
+        "prompt_tokens": 1430,
+        "total_tokens": 1521,
+        "prompt_tokens_details": {
+          "cached_tokens": 289
+        }
+      },
+      "model_response": {
+        "mapping": {
+          "sku": "SKU",
+          "name": "Name",
+          "regular_price": "Regular price",
+          "sale_price": "Sale price",
+          "currency": "Categories",
+          "product_type": "Type",
+          "parent_sku": "Parent",
+          "barcode": "GTIN, UPC, EAN, or ISBN",
+          "stock": "Stock",
+          "description": "Description"
+        },
+        "suggestions": [
+          {
+            "field": "sku",
+            "column": "SKU",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "name",
+            "column": "Name",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "regular_price",
+            "column": "Regular price",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "sale_price",
+            "column": "Sale price",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "currency",
+            "column": "Categories",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "product_type",
+            "column": "Type",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "parent_sku",
+            "column": "Parent",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "barcode",
+            "column": "GTIN, UPC, EAN, or ISBN",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "stock",
+            "column": "Stock",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          },
+          {
+            "field": "description",
+            "column": "Description",
+            "reason": "Suggested by the local open model from the header and sample values. Confirm against the preview."
+          }
+        ],
+        "engine": {
+          "kind": "open_model",
+          "name": "catalog-qwen",
+          "elapsed_ms": 1217,
+          "usage": {
+            "completion_tokens": 91,
+            "prompt_tokens": 1430,
+            "total_tokens": 1521,
+            "prompt_tokens_details": {
+              "cached_tokens": 289
+            }
+          }
+        },
+        "warnings": []
+      },
+      "rule_report_with_human_mapping": {
+        "summary": {
+          "total_rows": 30,
+          "error_count": 6,
+          "warning_count": 2,
+          "affected_rows": 7,
+          "assumed_simple_rows": 0
+        },
+        "issues": [
+          {
+            "id": "issue-0001",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 6,
+            "field": "regular_price",
+            "sku": "woo-polo-noprice",
+            "message": "Regular price is required for simple products.",
+            "value": ""
+          },
+          {
+            "id": "issue-0002",
+            "code": "missing_regular_price",
+            "severity": "warning",
+            "row": 11,
+            "field": "regular_price",
+            "sku": "wp-pennant-noprice",
+            "message": "Regular price is missing for an external product; confirm whether this is intentional.",
+            "value": ""
+          },
+          {
+            "id": "issue-0003",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 12,
+            "field": "regular_price",
+            "sku": "",
+            "message": "Regular price is required for simple products.",
+            "value": ""
+          },
+          {
+            "id": "issue-0004",
+            "code": "missing_sku",
+            "severity": "warning",
+            "row": 12,
+            "field": "sku",
+            "sku": "",
+            "message": "SKU is missing; this record cannot be matched for SKU conflicts.",
+            "value": ""
+          },
+          {
+            "id": "issue-0005",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 28,
+            "field": "regular_price",
+            "sku": "woo-hoodie-green-no-price",
+            "message": "Regular price is required for variation products.",
+            "value": ""
+          },
+          {
+            "id": "issue-0006",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 29,
+            "field": "regular_price",
+            "sku": "woo-hoodie-blue-no-price",
+            "message": "Regular price is required for variation products.",
+            "value": ""
+          },
+          {
+            "id": "issue-0007",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 30,
+            "field": "regular_price",
+            "sku": "woo-hoodie-blue-logo-dup",
+            "message": "Regular price is required for variation products.",
+            "value": ""
+          },
+          {
+            "id": "issue-0008",
+            "code": "missing_regular_price",
+            "severity": "error",
+            "row": 31,
+            "field": "regular_price",
+            "sku": "woo-hoodie-red-onsale",
+            "message": "Regular price is required for variation products.",
+            "value": ""
+          }
+        ],
+        "notes": [
+          "Row numbers count CSV records, with the header as record 1; quoted multiline cells count once.",
+          "SKU comparisons use exact, case-sensitive source strings within this file; no rows are merged.",
+          "Original values are retained. CSV exports prefix risky text with an apostrophe to prevent spreadsheet formulas.",
+          "Prices accept a decimal point without currency symbols or thousands separators; ambiguous formats require review.",
+          "Blank currencies are compared only with other blank currencies. Confirm the file's currency before relying on price conflicts.",
+          "Unmapped fields are empty in normalized output: currency."
+        ]
+      }
+    }
+  ],
+  "finished_at": "2026-10-15T16:47:36+08:00"
+}

@@ -1,0 +1,64 @@
+{
+  "researched_on": "2026-10-15",
+  "timezone": "Asia/Shanghai",
+  "method": "Purposive search of public Upwork job URLs and official product/platform documentation. This is not a representative sample of all jobs or awarded contracts.",
+  "access_limit": "Direct Upwork job pages returned access errors. Job details below were readable in search-index snapshots of those same original URLs. Open status, current proposal counts and actual agreed prices are unverified. Relative 'hours ago' labels refer to crawl context, not today's time.",
+  "jobs": [
+    {
+      "title": "Shopify Bulk Product Import – ~3,000 Products from Supplier Catalogs",
+      "url": "https://www.upwork.com/freelance-jobs/apply/Shopify-Bulk-Product-Import-000-Products-from-Supplier-Catalogs_~022107832914102288729/",
+      "indexed_budget": "$12–27/hour in page fields; body asks for a fixed quote",
+      "indexed_proposals": "20–50",
+      "scope": "8 supplier catalogs, around 3,000 products, normalization, variant/image mapping, import and verification; paid trial around 50 products",
+      "constraints": "Prior large Shopify/Matrixify imports and basic French reading",
+      "interpretation": "Strong evidence of the workflow, but most scope is outside a small file checker. Conflicting budget formats need client clarification."
+    },
+    {
+      "title": "WooCommerce + WPML Specialist - New Product Upload & Multi-Language Translation",
+      "url": "https://www.upwork.com/freelance-jobs/apply/WooCommerce-WPML-Specialist-New-Product-Upload-Multi-Language-Translation_~022100231602408440733/",
+      "indexed_publication_date": "2026-09-16",
+      "indexed_budget": "$400 fixed",
+      "indexed_proposals": "15–20",
+      "scope": "Supplier CSV vs store comparison using SKU and EAN; two stores, six languages, upload, WPML links and mandatory report",
+      "constraints": "Explicitly not beginner work; proven WooCommerce and WPML experience",
+      "interpretation": "Conflict reporting is valuable, but the full contract requires platform and translation integration."
+    },
+    {
+      "title": "Shopify Products and Price Updates Assistant",
+      "url": "https://www.upwork.com/freelance-jobs/apply/Shopify-Products-and-Price-Updates-Assistant_~022092867240466550420/",
+      "indexed_budget": "$6–10/hour",
+      "indexed_proposals": "20–50",
+      "scope": "Recurring furniture supplier sheets, field mapping, prices, costs, complex variants and bulk updates; some months 10–20 hours",
+      "constraints": "Body requests Philippines remote, despite page displaying Worldwide; expert Shopify and spreadsheet skills",
+      "interpretation": "Repeat work exists, but low advertised rates and location requirements limit relevance."
+    }
+  ],
+  "platform_costs": [
+    {
+      "url": "https://support.upwork.com/hc/en-us/articles/211062898-Understanding-and-using-Connects",
+      "facts": "Connects cost USD 0.15 each. Required Connects vary by job and can change. Rejection, another freelancer being selected, and expiry without hire do not return Connects."
+    },
+    {
+      "url": "https://support.upwork.com/hc/en-us/articles/211062538-Learn-about-the-Freelancer-Service-Fee",
+      "facts": "Freelancer service fee ranges from 0% to 15% per contract and is shown before proposal/offer acceptance."
+    }
+  ],
+  "alternatives": [
+    {"url": "https://woocommerce.com/document/product-csv-importer-exporter/", "facts": "Built-in importer automatically maps recognized columns; supplier CSV preparation and variation structure require care."},
+    {"url": "https://apps.shopify.com/excel-export-import", "facts": "Matrixify advertises import/export/update features, free demo and Basic at USD 20/month."},
+    {"url": "https://inventacloud.ai/", "facts": "Vendor advertises AI column-mapping suggestions, human confirmation, reusable mappings and validation. This is a feature claim, not independent evidence of sales or performance."}
+  ],
+  "analysis": {
+    "recommendation": "Build a narrow supplier-file mapping and catalog preflight workflow as a contest project and freelance delivery aid. Validate paid demand before building a hosted subscription product.",
+    "initial_scope": "One CSV, one currency, one target template, simple products; preserve original values, confirm ambiguous mappings, emit a standardized file plus row-level issues and change log.",
+    "ai_role": "Use an open-weight model to infer nonstandard/multilingual column semantics from headers and a few example values. Deterministic code checks missing values, identifiers and conflicts. Do not let the model invent prices, identifiers or exchange rates.",
+    "sample_gaps": "Downloaded fixtures use platform-native headers; none contains duplicate nonempty exact SKUs. Heterogeneous supplier headers and duplicate/conflict cases still need independently labeled fixtures. CrossPeak bad names/SKUs contain issue labels and cannot support a fair model benchmark without addressing leakage.",
+    "estimates_not_market_statistics": {
+      "mvp_engineering_hours": "18–30",
+      "testing_demo_article_hours": "8–12",
+      "cash_build_budget_usd": "0–30 incremental, assuming suitable existing hardware or an inexpensive external inference arrangement; not yet benchmarked",
+      "initial_outreach_budget_usd": "30–50 proposed cap; no proposals sent or purchases made",
+      "scenario": "20 proposals × assumed 16 Connects × USD 0.15 = USD 48. One hypothetical USD 80 contract at a 15% service fee leaves USD 20 after those proposal costs, before tax, withdrawal, compute and labor. This is an illustration, not an estimated conversion rate."
+    }
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "method": "Python csv.DictReader; counts exclude header; CSV record numbers may differ from physical lines for multiline fields. No model was run.",
+  "files": [
+    {
+      "file": "crosspeak-bad.csv",
+      "data_records": 30,
+      "columns": 50,
+      "product_types": {
+        "variable": 5,
+        "simple": 7,
+        "external": 2,
+        "variation": 16
+      },
+      "blank_regular_price_by_type": {
+        "variable": 5,
+        "simple": 2,
+        "external": 1,
+        "variation": 4
+      },
+      "duplicate_nonempty_exact_skus": {},
+      "warning": "Blank prices and repeated values are observations, not automatically errors. SKU comparison here is exact and scoped to one file.",
+      "bad_fixture_examples": [
+        {
+          "csv_record": 2,
+          "Type": "variable",
+          "SKU": "woo-hoodie-noimg",
+          "Name": "Hoodie (No Gallery Image)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 3,
+          "Type": "variable",
+          "SKU": "woo-hoodie-novarimg",
+          "Name": "Hoodie (No Variation Image)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 4,
+          "Type": "variable",
+          "SKU": "woo-hoodie-noimgs",
+          "Name": "Hoodie (No Images)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 5,
+          "Type": "variable",
+          "SKU": "woo-hoodie-price-issues",
+          "Name": "Hoodie (No Price Variations)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 6,
+          "Type": "simple",
+          "SKU": "woo-polo-noprice",
+          "Name": "Polo (No Price)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 7,
+          "Type": "simple",
+          "SKU": "woo-long-sleeve-tee-noimg",
+          "Name": "Long Sleeve Tee (No Featured Images)",
+          "Regular price": "25",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 8,
+          "Type": "simple",
+          "SKU": "woo-hoodie-with-zipper-nocat",
+          "Name": "Hoodie with Zipper (No Category)",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 9,
+          "Type": "simple",
+          "SKU": "woo-sunglasses-with-a-long-name-and-long-sku-you-have-to-dealwith�",
+          "Name": "Sunglasses with an extremely long product name that you have to deal with and there is nothing you can do to stop me... also here are some ƜЄίȐǆ characters �",
+          "Regular price": "90",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 10,
+          "Type": "external",
+          "SKU": "wp-pennant-nourl",
+          "Name": "WordPress Pennant (External No URL)",
+          "Regular price": "11.05",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 11,
+          "Type": "external",
+          "SKU": "wp-pennant-noprice",
+          "Name": "WordPress Pennant (External No Price)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 12,
+          "Type": "simple",
+          "SKU": "",
+          "Name": "Polo (No SKU)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 13,
+          "Type": "variable",
+          "SKU": "woo-hoodie-novars",
+          "Name": "Hoodie (no variations)",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 14,
+          "Type": "simple",
+          "SKU": "woo-tshirt-nobrand",
+          "Name": "T-Shirt (No Brand)",
+          "Regular price": "18",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 15,
+          "Type": "simple",
+          "SKU": "woo-tshirt-noupc",
+          "Name": "T-Shirt (No UPC)",
+          "Regular price": "18",
+          "Sale price": "",
+          "Parent": ""
+        },
+        {
+          "csv_record": 16,
+          "Type": "variation",
+          "SKU": "woo-hoodie-red-nogalimg",
+          "Name": "Hoodie (No Gallery Image) - Red, No",
+          "Regular price": "45",
+          "Sale price": "42",
+          "Parent": "woo-hoodie-noimg"
+        },
+        {
+          "csv_record": 17,
+          "Type": "variation",
+          "SKU": "woo-hoodie-green-nogalimg",
+          "Name": "Hoodie (No Gallery Image) - Green, No",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-noimg"
+        },
+        {
+          "csv_record": 18,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-nogalimg",
+          "Name": "Hoodie (No Gallery Image) - Blue, No",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-noimg"
+        },
+        {
+          "csv_record": 19,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-logo-nogalimg",
+          "Name": "Hoodie (No Gallery Image) - Blue, Yes",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-noimg"
+        },
+        {
+          "csv_record": 20,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-logo-noimg",
+          "Name": "Hoodie (No Variation Image) - Blue, Yes",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-novarimg"
+        },
+        {
+          "csv_record": 21,
+          "Type": "variation",
+          "SKU": "woo-hoodie-red-noimg",
+          "Name": "Hoodie (No Variation Image) - Red, No",
+          "Regular price": "45",
+          "Sale price": "42",
+          "Parent": "woo-hoodie-novarimg"
+        },
+        {
+          "csv_record": 22,
+          "Type": "variation",
+          "SKU": "woo-hoodie-green-noimg",
+          "Name": "Hoodie (No Variation Image) - Green, No",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-novarimg"
+        },
+        {
+          "csv_record": 23,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-noimg",
+          "Name": "Hoodie (No Variation Image) - Blue, No",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-novarimg"
+        },
+        {
+          "csv_record": 24,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-logo-noimgs",
+          "Name": "Hoodie (No Images) - Blue, Yes",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-noimgs"
+        },
+        {
+          "csv_record": 25,
+          "Type": "variation",
+          "SKU": "woo-hoodie-red-noimgs",
+          "Name": "Hoodie (No Images) - Red, No",
+          "Regular price": "45",
+          "Sale price": "42",
+          "Parent": "woo-hoodie-noimgs"
+        },
+        {
+          "csv_record": 26,
+          "Type": "variation",
+          "SKU": "woo-hoodie-green-noimgs",
+          "Name": "Hoodie (No Images) - Green, No",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-noimgs"
+        },
+        {
+          "csv_record": 27,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-noimgs",
+          "Name": "Hoodie (No Images) - Blue, No",
+          "Regular price": "45",
+          "Sale price": "",
+          "Parent": "woo-hoodie-noimgs"
+        },
+        {
+          "csv_record": 28,
+          "Type": "variation",
+          "SKU": "woo-hoodie-green-no-price",
+          "Name": "Hoodie (No Price Variations) - Green, No",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": "woo-hoodie-price-issues"
+        },
+        {
+          "csv_record": 29,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-no-price",
+          "Name": "Hoodie (No Price Variations) - Blue, No",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": "woo-hoodie-price-issues"
+        },
+        {
+          "csv_record": 30,
+          "Type": "variation",
+          "SKU": "woo-hoodie-blue-logo-dup",
+          "Name": "Hoodie (No Price Variations) - Blue, Yes",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": "woo-hoodie-price-issues"
+        },
+        {
+          "csv_record": 31,
+          "Type": "variation",
+          "SKU": "woo-hoodie-red-onsale",
+          "Name": "Hoodie (No Price Variations) - Red, No",
+          "Regular price": "",
+          "Sale price": "",
+          "Parent": "woo-hoodie-price-issues"
+        }
+      ]
+    },
+    {
+      "file": "crosspeak-good.csv",
+      "data_records": 31,
+      "columns": 56,
+      "product_types": {
+        "simple": 11,
+        "variable": 3,
+        "grouped": 1,
+        "simple, downloadable, virtual": 2,
+        "external": 1,
+        "variation": 13
+      },
+      "blank_regular_price_by_type": {
+        "variable": 3,
+        "grouped": 1
+      },
+      "duplicate_nonempty_exact_skus": {},
+      "warning": "Blank prices and repeated values are observations, not automatically errors. SKU comparison here is exact and scoped to one file.",
+      "bad_fixture_examples": []
+    },
+    {
+      "file": "woocommerce-official.csv",
+      "data_records": 25,
+      "columns": 51,
+      "product_types": {
+        "variable": 2,
+        "simple": 12,
+        "simple, downloadable, virtual": 2,
+        "variation": 7,
+        "grouped": 1,
+        "external": 1
+      },
+      "blank_regular_price_by_type": {
+        "variable": 2,
+        "grouped": 1
+      },
+      "duplicate_nonempty_exact_skus": {},
+      "warning": "Blank prices and repeated values are observations, not automatically errors. SKU comparison here is exact and scoped to one file.",
+      "bad_fixture_examples": []
+    }
+  ]
+}
