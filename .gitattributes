@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# Downloaded originals must retain exact bytes for provenance checks.
+research/2026-10-15/samples/** -text
+*.zip -text
+*.jpg -text
