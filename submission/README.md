@@ -17,8 +17,9 @@
 ## 发布记录
 
 1. DEV 作者账号：`esroamer`（HTZhao）。文章包含官方模板栏目，以及 `devchallenge`、`hf26challenge` 和 `opensource` 标签。
-2. 文章提供公开仓库和 [MP4 文件](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)链接，并标注为 AI-assisted。
+2. 文章提供公开仓库和 [YouTube 演示](https://youtu.be/7ixUD3DLN7Y)链接，保留 [MP4 文件](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)作为备用下载，并标注为 AI-assisted。
 3. DEV 页面记录的发布时间为 `2026-10-19T05:11:44Z`，即北京时间 **13:11:44**，早于当天 **14:59** 的投稿截止时间。
+4. YouTube Studio 已确认视频预定于北京时间 **2026 年 10 月 19 日 14:45** 公开（`2026-10-19T06:45:00Z`）；发布前视频为私享状态。视频时长 2:25，版权检查未发现问题。
 
 材料没有声称已有付费客户、已获得独立准确率或时间节省数据，也没有申报未使用的合作伙伴奖项。AI 辅助开发及合成解说已披露。
 

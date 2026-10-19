@@ -16,7 +16,7 @@ Catalog Compass 就是为这一步检查准备的小工具。开放权重模型�
 
 ## 演示（Demo）
 
-[观看或下载带解说的演示视频（MP4）](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)。
+[在 YouTube 观看带解说的演示视频](https://youtu.be/7ixUD3DLN7Y) · [下载 MP4（备用）](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)。
 
 视频使用真实应用界面截图和实际的本地模型推理结果，经过讲解剪辑，并配有合成的英文旁白。演示中的供应商文件包含 10 条虚构商品记录，已随项目提供。
 

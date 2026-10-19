@@ -20,7 +20,7 @@ A freelancer could use it to offer a focused service: reviewing one supplier fil
 
 ## Demo
 
-[Watch or download the narrated walkthrough (MP4)](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4).
+[Watch the narrated walkthrough on YouTube](https://youtu.be/7ixUD3DLN7Y) · [Download the MP4 (backup)](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4).
 
 The video uses real application captures and real local inference. It is edited for explanation, with synthetic English narration. Its ten-product supplier file is fictional and included with the project.
 
