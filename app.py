@@ -2,11 +2,12 @@
 import argparse
 import json
 import mimetypes
+import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
-from catalog_check import model
+from catalog_check import model, runtime
 from catalog_check.catalog import profile_csv, validate_catalog, issues_csv, normalized_csv
 from catalog_check.samples import SAMPLES, get_sample
 
@@ -47,7 +48,7 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         try:
             if path == "/api/status":
-                self.send(200, {"model": model.status(), "samples": SAMPLES})
+                self.send(200, {"model": model.status(), "runtime": runtime.snapshot(), "samples": SAMPLES})
             elif path.startswith("/api/samples/"):
                 self.send(200, get_sample(path.rsplit("/", 1)[-1]))
             elif path in {"/", "/index.html", "/styles.css", "/app.js"}:
@@ -75,17 +76,27 @@ class Handler(BaseHTTPRequestHandler):
                 self.send(413, {"error": "Choose a CSV smaller than 2 MB."})
                 return
             data = json.loads(self.rfile.read(length))
-            if not isinstance(data, dict) or not isinstance(data.get("csv"), str):
+            if not isinstance(data, dict):
+                raise ValueError("Send a JSON object.")
+            path = urlparse(self.path).path
+            if path == "/api/model/test":
+                self.send(200, model.test_connection(data.get("connection")))
+                return
+            if path == "/api/model/start":
+                if not isinstance(data.get("install", False), bool) or not isinstance(data.get("cpu", False), bool):
+                    raise ValueError("Invalid local setup options.")
+                self.send(202, runtime.launch(install=data.get("install", False), cpu=data.get("cpu", False)))
+                return
+            if not isinstance(data.get("csv"), str):
                 raise ValueError("A CSV text string is required.")
             csv_text = data["csv"]
             profile = profile_csv(csv_text)
             if profile["row_count"] > 5000 or len(profile["headers"]) > 100:
                 raise ValueError("This prototype supports up to 5,000 records and 100 columns.")
-            path = urlparse(self.path).path
             if path == "/api/profile":
                 self.send(200, profile)
             elif path == "/api/map":
-                self.send(200, model.suggest_mapping(profile))
+                self.send(200, model.suggest_mapping(profile, data.get("connection")))
             elif path in {"/api/check", "/api/export"}:
                 mapping = data.get("mapping", {})
                 if not isinstance(mapping, dict) or any(key not in model.FIELDS for key in mapping):
@@ -122,10 +133,13 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--open", action="store_true", help="Open the app in your browser")
     args = parser.parse_args()
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
     print(f"Catalog Compass: http://127.0.0.1:{args.port}", flush=True)
-    print("Your catalog stays in memory. Press Ctrl+C to stop.", flush=True)
+    print("Choose Local model or API service in AI settings. Press Ctrl+C to stop.", flush=True)
+    if args.open:
+        webbrowser.open(f"http://127.0.0.1:{args.port}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

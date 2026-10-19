@@ -1,0 +1,95 @@
+1
+00:00:00,300 --> 00:00:05,064
+Catalog Compass helps freelancers review supplier product files before import.
+
+2
+00:00:05,304 --> 00:00:12,772
+It finds missing prices, duplicate product codes, and conflicting records, while keeping the original file unchanged.
+
+3
+00:00:13,622 --> 00:00:19,795
+This demo uses Qwen 3, a small open-weight model, through llama.cpp on this computer.
+
+4
+00:00:20,035 --> 00:00:25,858
+Local mode needs no API key. Setup and startup are available from AI settings.
+
+5
+00:00:26,708 --> 00:00:31,647
+We load the included sample: ten fictional products with unfamiliar column names.
+
+6
+00:00:31,887 --> 00:00:37,640
+SKU, product name, and regular price are required. The other fields are optional.
+
+7
+00:00:38,490 --> 00:00:44,439
+The model suggests Item ref for SKU, Display label for name, and List amount for price.
+
+8
+00:00:44,679 --> 00:00:49,647
+It receives column headers and a few short example values, not the full catalog.
+
+9
+00:00:50,497 --> 00:00:55,346
+Here is a real mistake: the model used Kind for both Product type and Description.
+
+10
+00:00:55,586 --> 00:01:00,239
+The app clears both choices and explains exactly which column and fields conflict.
+
+11
+00:01:01,089 --> 00:01:04,813
+I select Kind as Product type and leave Description unselected.
+
+12
+00:01:05,053 --> 00:01:12,361
+The warning disappears. Barcode remains matched to GTIN, separately from the supplier's internal SKU.
+
+13
+00:01:13,211 --> 00:01:17,510
+After reviewing the selections, I confirm the mapping and run the checks.
+
+14
+00:01:17,750 --> 00:01:23,488
+Python rules check the values. The model does not invent prices or delete duplicates.
+
+15
+00:01:24,338 --> 00:01:29,792
+For this sample, the reviewed mapping produces four errors and six warnings across nine rows.
+
+16
+00:01:30,032 --> 00:01:34,200
+These are fixture results, not an estimate of real-world accuracy.
+
+17
+00:01:35,050 --> 00:01:39,249
+One product code appears with prices of thirty-two and thirty-nine dollars.
+
+18
+00:01:39,489 --> 00:01:45,047
+The report shows both source rows, so the reviewer can ask the supplier which price is correct.
+
+19
+00:01:45,897 --> 00:01:49,736
+Download the issue report or a mapped CSV for further review.
+
+20
+00:01:49,976 --> 00:01:55,634
+Problem rows are preserved. This is a review tool, not an automatic store importer.
+
+21
+00:01:56,484 --> 00:02:04,197
+An optional API mode avoids the local-model download. Enter your provider, model, and key, then test the connection.
+
+22
+00:02:04,437 --> 00:02:09,776
+Samples go to that provider. The key stays in memory and is cleared when you refresh.
+
+23
+00:02:10,626 --> 00:02:16,074
+The service to test is simple: review one supplier file and deliver a useful exception report.
+
+24
+00:02:16,314 --> 00:02:24,277
+Forty-four automated tests pass. Paid demand remains unvalidated. The next step is a supervised freelancer trial.

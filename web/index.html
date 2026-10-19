@@ -4,93 +4,106 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173c34">
-  <meta name="description" content="Review supplier catalog fields, confirm a mapping, and inspect data quality issues with Catalog Compass.">
-  <title>Catalog Compass — A clearer catalog starts here</title>
+  <meta name="description" content="Check product CSV files for missing prices, duplicate SKUs and conflicting records.">
+  <title>Catalog Compass — Check your product CSV</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <div class="app-shell">
-    <aside class="sidebar">
-      <a class="brand" href="/" aria-label="Catalog Compass home">
-        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="17" stroke="currentColor"/><path d="m26 12-3.2 10.8L12 26l3.2-10.8L26 12Z" fill="currentColor"/><circle cx="19" cy="19" r="2.5" fill="#173c34"/></svg>
-        <span>Catalog<br><strong>Compass</strong></span>
-      </a>
-      <div class="sidebar-caption">THE CATALOG WORKBENCH</div>
-      <nav class="steps" aria-label="Review steps">
-        <button class="step active" data-step="0" aria-current="step"><span class="step-number">01</span><span><strong>Choose a catalog</strong><small>Start with your source</small></span><span class="step-check" aria-hidden="true"></span></button>
-        <button class="step" data-step="1" disabled><span class="step-number">02</span><span><strong>Confirm the fields</strong><small>Suggestions, with your say</small></span><span class="step-check" aria-hidden="true"></span></button>
-        <button class="step" data-step="2" disabled><span class="step-number">03</span><span><strong>Review the findings</strong><small>Know what needs attention</small></span><span class="step-check" aria-hidden="true"></span></button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="small-compass" aria-hidden="true">✳</div>
-        <p>A little clarity.<br>A better handoff.</p>
-        <div class="sidebar-rule"></div>
-        <span>OPEN MODEL · HUMAN REVIEW</span>
-        <small>Built for small supplier catalogs.</small>
-      </div>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <span class="topbar-label">WORKSPACE <span class="slash">/</span> CATALOG REVIEW</span>
-        <span class="model-status" id="model-status"><span class="status-dot"></span><span id="model-status-text">Checking model connection…</span></span>
-      </header>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Catalog Compass home">Catalog Compass</a>
+      <button class="ai-settings-button" id="open-ai-settings" type="button" aria-haspopup="dialog"><span class="model-status" id="model-status"><span class="status-dot"></span><span id="model-status-text">Checking local AI…</span></span><span>AI settings</span></button>
+    </header>
+    <nav class="steps" aria-label="Review steps">
+      <button class="step active" data-step="0" aria-current="step"><span class="step-number">1</span><span>Upload CSV</span></button>
+      <button class="step" data-step="1" disabled><span class="step-number">2</span><span>Match columns</span></button>
+      <button class="step" data-step="2" disabled><span class="step-number">3</span><span>Review issues</span></button>
+    </nav>
+    <main>
       <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
-
       <section id="stage-0" class="stage">
         <div class="page-heading">
-          <div class="eyebrow">01 / CHOOSE A CATALOG</div>
-          <h1>Good catalogs begin<br>with a <em>closer look.</em></h1>
-          <p>Turn an unfamiliar supplier spreadsheet into a reviewable catalog.<br class="desktop-break"> Map the fields, catch the gaps, and keep the decisions yours.</p>
+          <h1>Check your product CSV</h1>
+          <p>Find missing prices, duplicate product codes (SKUs), and conflicting records before import.</p>
         </div>
-        <div class="intake-grid">
-          <div class="card upload-card">
-            <div class="card-heading"><h2>Bring your source file</h2><span class="tiny-tag">CSV</span></div>
-            <label class="drop-zone" id="drop-zone" for="file-input">
-              <svg class="upload-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="11" y="5" width="26" height="36" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M18 27h12M18 32h8M24 13v9m-4-5 4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <strong>Drop a supplier CSV here</strong>
-              <span>or <u>browse your files</u></span>
-              <small>UTF-8 CSV · Up to 5,000 records</small>
-            </label>
-            <input type="file" id="file-input" accept=".csv,text/csv" class="file-input">
-            <div class="privacy-note"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="4" y="8" width="10" height="7" rx="1.5" stroke="currentColor"/><path d="M6 8V5a3 3 0 0 1 6 0v3" stroke="currentColor"/></svg><p>Your source file stays intact. This local app sends field names and sample values to the configured model when you request suggestions.</p></div>
+        <div class="card upload-card">
+          <label class="drop-zone" id="drop-zone" for="file-input">
+            <svg class="upload-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 21V5m-6 6 6-6 6 6M5 21v6h22v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <strong>Drop a CSV here or choose a file</strong>
+            <span>UTF-8 CSV · Up to 5,000 rows</span>
+          </label>
+          <input type="file" id="file-input" accept=".csv,text/csv" class="file-input">
+          <div class="input-requirements">
+            <strong>Your file needs three types of columns:</strong>
+            <p>Product code (SKU), product name, and regular selling price.</p>
+            <p class="secondary">Column names can differ. Extra columns are allowed; other fields are optional.</p>
           </div>
-          <aside class="how-card">
-            <div class="eyebrow">A SMALL, DELIBERATE WORKFLOW</div>
-            <h2>Let the model suggest.<br>Let the rules check.<br><em>You make the call.</em></h2>
-            <div class="how-row"><span>1</span><p><strong>Understand the columns</strong>Use an open model to suggest field mappings.</p></div>
-            <div class="how-row"><span>2</span><p><strong>Review before checking</strong>Confirm every mapping, or change it yourself.</p></div>
-            <div class="how-row"><span>3</span><p><strong>Leave with clear findings</strong>Export a review report and normalized records.</p></div>
-          </aside>
         </div>
-        <div class="section-heading"><div><span class="eyebrow">NO FILE HANDY?</span><h2>Take a sample for a spin</h2></div><p>Real formats. Clearly labeled test data.</p></div>
-        <div id="sample-list" class="sample-grid"><div class="sample-placeholder">Loading sample catalogs…</div></div>
+        <div class="sample-section">
+          <h2>Try a sample</h2>
+          <div id="featured-sample"><p class="secondary">Loading sample…</p></div>
+          <details class="more-samples" id="more-samples"><summary>More sample files</summary><div id="sample-list" class="sample-grid"></div></details>
+        </div>
       </section>
 
       <section id="stage-1" class="stage" hidden>
-        <div class="page-heading compact"><div class="eyebrow">02 / CONFIRM THE FIELDS</div><h1>A shared language<br>for <em>every column.</em></h1><p>Ask for a suggested mapping, then check it against your source. Nothing is confirmed until you say so.</p></div>
-        <div class="source-strip"><span class="file-glyph" aria-hidden="true">↳</span><div><strong class="source-name"></strong><span class="source-detail"></span></div><button class="text-button" id="change-file">Choose another file <span aria-hidden="true">↗</span></button></div>
-        <div class="card preview-card"><div class="card-heading"><h2>A look at your source</h2><span id="preview-caption" class="muted"></span></div><div class="table-scroll" id="preview-table" tabindex="0" aria-label="Source file preview"></div></div>
-        <div class="mapping-toolbar"><div><h2>Map the catalog fields</h2><p>SKU, product name, and regular price are required. Use each column once.</p></div><button id="suggest-button" class="button primary"><span aria-hidden="true">✳</span> Suggest field mappings</button></div>
-        <div class="engine-banner" id="engine-banner"><span class="engine-symbol" aria-hidden="true">✳</span><div><strong id="engine-title">Your review, assisted by an open model</strong><p id="engine-description">Choose “Suggest field mappings” to analyze the headers and sample values. You can also map the fields manually.</p></div></div>
-        <div id="mapping-warnings" class="mapping-warnings" hidden></div>
-        <div class="card mapping-card"><div class="mapping-table-header"><span>CATALOG FIELD</span><span>YOUR SOURCE COLUMN</span><span>REVIEW NOTE</span></div><div id="mapping-fields"></div></div>
-        <div class="confirm-bar"><label class="confirm-label"><input type="checkbox" id="confirm-mapping"><span>I have reviewed the field mappings.<small id="confirmation-help">Unmapped source columns are omitted. Mapped values are never guessed or filled in.</small></span></label><button id="check-button" class="button primary" disabled>Check this catalog <span aria-hidden="true">→</span></button></div>
+        <div class="page-heading"><h1>Match your columns</h1><p>Tell us which column contains each field. AI can suggest a match.</p></div>
+        <div class="source-strip"><div><strong class="source-name"></strong><span class="source-detail"></span></div><button class="text-button" id="change-file">Change file</button></div>
+        <div class="mapping-toolbar"><h2>Required columns</h2><button id="suggest-button" class="button primary">Suggest with AI</button></div>
+        <p id="inference-destination" class="secondary">Local mode: column samples stay on this computer.</p>
+        <div class="engine-banner" id="engine-banner"><strong id="engine-title">Choose columns yourself or use AI</strong><p id="engine-description">Check each selection against the example values.</p></div>
+        <div id="mapping-warnings" class="mapping-warnings" role="status" hidden></div>
+        <div class="card mapping-card"><div class="mapping-table-header" aria-hidden="true"><span>Field to check</span><span>Column in your file</span><span>Example values</span></div><div id="mapping-fields"></div></div>
+        <p class="secondary">These three columns are required in this version. Their names do not need to match the labels above.</p>
+        <details class="optional-fields" id="optional-fields"><summary>Optional columns <span id="optional-count"></span></summary><p class="secondary">Leave a field unselected if your file does not contain it.</p><div class="card mapping-card"><div id="optional-mapping-fields"></div></div></details>
+        <p id="type-assumption" class="type-assumption">No product type selected: all rows will be treated as simple products.</p>
+        <details class="source-preview"><summary>Preview source rows <span id="preview-caption"></span></summary><div class="card"><div class="table-scroll" id="preview-table" tabindex="0" aria-label="Source file preview"></div></div></details>
+        <div class="confirm-bar"><div><label class="confirm-label"><input type="checkbox" id="confirm-mapping"><span>I have reviewed the selected columns.</span></label><p id="confirmation-help" class="secondary">Select the three required columns to continue.</p></div><button id="check-button" class="button primary" disabled>Check for issues</button></div>
       </section>
 
       <section id="stage-2" class="stage" hidden>
-        <div class="page-heading compact"><div class="eyebrow">03 / REVIEW THE FINDINGS</div><h1>A clearer view of<br><em>what needs attention.</em></h1><p>Rule-based checks surface potential issues. Review them against your source before making changes.</p></div>
-        <div class="source-strip"><span class="file-glyph" aria-hidden="true">↳</span><div><strong class="source-name"></strong><span class="source-detail"></span></div><button class="text-button" id="edit-mapping">Review field mappings <span aria-hidden="true">↗</span></button></div>
-        <div class="metrics"><div class="metric"><span>RECORDS CHECKED</span><strong id="metric-total">—</strong><small>Rows in your source</small></div><div class="metric"><span>ERRORS</span><strong id="metric-errors">—</strong><small>Resolve before handoff</small></div><div class="metric"><span>WARNINGS</span><strong id="metric-warnings">—</strong><small>Worth a closer look</small></div><div class="metric"><span>ROWS TO REVIEW</span><strong id="metric-affected">—</strong><small>One row may have several findings</small></div></div>
-        <div class="findings-toolbar"><div><h2>Catalog findings <span id="findings-count" class="count-pill"></span></h2><p>Source row numbers include the header row.</p></div><div class="filter-tabs" role="group" aria-label="Filter findings"><button data-filter="all" class="active" aria-pressed="true">All</button><button data-filter="error" aria-pressed="false">Errors</button><button data-filter="warning" aria-pressed="false">Warnings</button></div></div>
-        <div class="card findings-card"><div id="findings-table" class="table-scroll" tabindex="0" aria-label="Catalog findings"></div><div id="empty-findings" class="empty-findings" hidden><span aria-hidden="true">✓</span><h3>No findings in this view</h3><p id="empty-description">The checks did not find any issues in the mapped fields.</p></div></div>
-        <details class="review-assumptions" id="review-assumptions"><summary>Review assumptions <span>How to interpret this report</span></summary><ul id="report-notes"></ul></details>
-        <div class="export-bar"><div><h2>Your review, ready to hand off.</h2><p>Records are not fixed, removed, or merged. Formula-like text is escaped for spreadsheet safety.</p></div><div class="export-buttons"><button class="button secondary" id="export-issues">↓ Download findings</button><button class="button primary" id="export-normalized">↓ Export normalized CSV</button></div></div>
-        <p class="report-footnote">A clean report reflects the checks run on mapped fields; it is not a guarantee that a catalog is ready for a specific store. Missing source details still need human judgment.</p>
+        <div class="page-heading"><h1>Check results</h1><p>Review the flagged rows before importing your file.</p></div>
+        <div class="source-strip"><div><strong class="source-name"></strong><span class="source-detail"></span></div><button class="text-button" id="edit-mapping">Change column matches</button></div>
+        <div class="metrics">
+          <div class="metric"><span>Rows checked</span><strong id="metric-total">—</strong></div>
+          <div class="metric"><span>Errors</span><strong id="metric-errors">—</strong></div>
+          <div class="metric"><span>Warnings</span><strong id="metric-warnings">—</strong></div>
+          <div class="metric"><span>Rows to review</span><strong id="metric-affected">—</strong></div>
+        </div>
+        <div class="findings-toolbar"><h2>Issues <span id="findings-count" class="count-pill"></span></h2><div class="filter-tabs" role="group" aria-label="Filter issues"><button data-filter="all" class="active" aria-pressed="true">All</button><button data-filter="error" aria-pressed="false">Errors</button><button data-filter="warning" aria-pressed="false">Warnings</button></div></div>
+        <p class="secondary">Row numbers include the header. One row can have several issues.</p>
+        <div class="card findings-card"><div id="findings-table" class="table-scroll" tabindex="0" aria-label="Catalog issues"></div><div id="empty-findings" class="empty-findings" hidden><h3>No issues in this view</h3><p id="empty-description"></p></div></div>
+        <div class="export-bar"><button class="button primary" id="export-issues">Download issue report</button><button class="button secondary" id="export-normalized">Export mapped CSV</button></div>
+        <p class="secondary">The mapped CSV keeps all rows and their values. Unselected source columns are left out.</p>
+        <details class="review-assumptions" id="review-assumptions"><summary>Check limits and export notes</summary><ul id="report-notes"></ul></details>
       </section>
-      <footer class="footer"><span>Catalog Compass</span><span>Small scope. Traceable decisions.</span><span id="footer-model">Local catalog review</span></footer>
     </main>
+    <footer class="footer"><span id="privacy-summary">Local mode: your data stays on this computer. Your source file stays unchanged.</span><span id="footer-model"></span></footer>
   </div>
+  <dialog id="ai-settings" aria-labelledby="ai-settings-title">
+    <div class="settings-heading"><h2 id="ai-settings-title">Choose your AI</h2><button id="close-ai-settings" class="text-button" type="button">Close</button></div>
+    <fieldset class="source-choice"><legend>Model source</legend><label><input type="radio" name="ai-source" id="source-local" value="local" checked> Local model</label><label><input type="radio" name="ai-source" id="source-api" value="api"> API service</label></fieldset>
+    <section id="local-settings">
+      <p>Run Qwen on this computer. No API key needed; column samples stay local.</p>
+      <p id="local-setup-status" class="secondary" role="status">Checking the local model…</p>
+      <label class="cpu-option"><input type="checkbox" id="local-cpu"> Use CPU mode if GPU startup fails</label>
+      <div class="settings-actions"><button class="button primary" id="start-local-model" type="button">Start local AI</button><button class="button secondary" id="use-local-model" type="button">Use local model</button><button class="text-button" id="check-local-model" type="button">Refresh status</button></div>
+      <p class="secondary">First-time setup downloads about 672 MB from the official llama.cpp and Qwen repositories. One-click setup supports Windows x64.</p>
+    </section>
+    <section id="api-settings" hidden>
+      <p>Use an OpenAI-compatible Chat Completions API. No local model download needed.</p>
+      <label class="setting-field">Service<select id="api-preset"><option value="custom">Custom / compatible API</option><option value="deepseek">DeepSeek</option><option value="openrouter">OpenRouter</option></select></label>
+      <label class="setting-field">API base URL<input id="api-base-url" type="url" placeholder="https://provider.example/v1" autocomplete="off" spellcheck="false"></label>
+      <label class="setting-field">Model ID<input id="api-model" type="text" placeholder="Model ID from your provider" autocomplete="off" spellcheck="false"></label>
+      <label class="setting-field">API key<input id="api-key" type="password" placeholder="Paste your API key" autocomplete="off" spellcheck="false"></label>
+      <p class="secondary">Your key stays in memory; refresh or Clear API settings removes it. Requests go through this local app to your provider. Usage fees may apply.</p>
+      <details><summary>Advanced</summary><label class="setting-field">Output format<select id="api-format"><option value="json">JSON mode (recommended)</option><option value="schema">Strict JSON schema</option><option value="prompt">Prompt only (if JSON mode is unsupported)</option></select></label></details>
+      <label class="api-consent"><input id="api-consent" type="checkbox"><span id="api-consent-label">Allow column names and up to 3 short sample values per column to be sent to this service when I request AI suggestions.</span></label>
+      <div class="settings-actions"><button class="button primary" id="test-use-api" type="button">Test &amp; use API</button><button class="text-button" id="forget-api" type="button">Clear API settings</button></div>
+      <p class="secondary">The connection test sends a short test prompt, never your uploaded file.</p>
+    </section>
+    <p id="settings-feedback" class="settings-feedback" role="status" hidden></p>
+  </dialog>
 </body>
 </html>

@@ -1,6 +1,7 @@
 import json
 import threading
 import unittest
+from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import build_opener, ProxyHandler, Request
 from http.server import ThreadingHTTPServer
@@ -53,6 +54,25 @@ class ApiTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as error:
             self.post("/api/check", self.payload(), "https://example.com")
         self.assertEqual(error.exception.code, 403)
+
+    def test_connection_routes_reject_cross_origin_requests(self):
+        for route in ('/api/model/test', '/api/model/start'):
+            with self.subTest(route=route), self.assertRaises(HTTPError) as error:
+                self.post(route, {}, 'https://example.com')
+            self.assertEqual(error.exception.code, 403)
+
+    def test_connection_test_needs_no_uploaded_csv(self):
+        config = {'mode': 'api', 'base_url': 'https://provider.example/v1', 'model': 'test', 'api_key': 'test-secret'}
+        with patch('app.model.test_connection', return_value={'ready': True}) as test:
+            with self.post('/api/model/test', {'connection': config}) as response:
+                self.assertEqual(json.load(response), {'ready': True})
+            test.assert_called_once_with(config)
+
+    def test_local_start_needs_no_uploaded_csv(self):
+        with patch('app.runtime.launch', return_value={'busy': True}) as launch:
+            with self.post('/api/model/start', {'install': True, 'cpu': True}) as response:
+                self.assertEqual(response.status, 202)
+            launch.assert_called_once_with(install=True, cpu=True)
 
     def test_unmapped_required_field_denied(self):
         data = self.payload()

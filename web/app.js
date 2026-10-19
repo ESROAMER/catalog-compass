@@ -12,8 +12,9 @@ const fields = [
   ['stock', 'Stock quantity', 'Available units, if supplied'],
   ['description', 'Description', 'Long-form product information'],
 ];
+const requiredFields = ['sku', 'name', 'regular_price'];
 
-const state = { step: 0, csv: '', filename: '', profile: null, mapping: {}, suggestions: [], manual: new Set(), engine: null, report: null, filter: 'all', busy: false, status: null };
+const state = { step: 0, csv: '', filename: '', profile: null, mapping: {}, suggestions: [], mappingWarnings: [], manual: new Set(), engine: null, report: null, filter: 'all', busy: false, status: null, connection: {mode: 'local'} };
 const $ = id => document.getElementById(id);
 const text = (tag, content, className) => { const node = document.createElement(tag); node.textContent = content == null ? '' : String(content); if (className) node.className = className; return node; };
 
@@ -32,6 +33,64 @@ function notice(message, kind = '') {
   $('notice').hidden = !message;
 }
 
+const fieldLabel = field => fields.find(item => item[0] === field)?.[1] || field;
+
+function conflictAction(selected, column) {
+  if (selected.includes('sku') && selected.includes('barcode')) return `Use the supplier's internal item reference for SKU and the GTIN/EAN/UPC column for Barcode / GTIN. Use "${column}" only once. If no barcode column exists, leave Barcode / GTIN as Not provided.`;
+  if (selected.includes('name') && selected.includes('description')) return 'Use the product title for Product name and a separate column of product text for Description. If no description column exists, leave Description as Not provided.';
+  return `Keep "${column}" for the correct field. Choose another column for the other field, or select Not provided if optional.`;
+}
+
+function currentColumnConflicts() {
+  const columns = new Map();
+  Object.entries(state.mapping).forEach(([field, column]) => {
+    if (column) columns.set(column, [...(columns.get(column) || []), field]);
+  });
+  return Array.from(columns).filter(([, selected]) => selected.length > 1);
+}
+
+function renderMappingWarnings() {
+  const conflicts = currentColumnConflicts();
+  const warnings = state.mappingWarnings.filter(warning => {
+    if (typeof warning === 'string') return true;
+    const related = warning.fields || [];
+    // A user decision can keep one optional field unselected. Required fields
+    // must still have a column, and an active collision is always shown below.
+    const reviewed = related.some(field => state.manual.has(field));
+    const missingRequired = related.some(field => requiredFields.includes(field) && !state.mapping[field]);
+    return (!reviewed || missingRequired) && !conflicts.some(([column]) => column === warning.column);
+  }).map(warning => typeof warning === 'string' ? {message: warning, fields: []} : warning);
+  conflicts.forEach(([column, selected]) => warnings.push({
+    fields: selected,
+    message: `Column "${column}" is selected for ${selected.map(fieldLabel).join(' and ')}. One column can only serve one field.`,
+    action: conflictAction(selected, column),
+  }));
+  const container = $('mapping-warnings');
+  container.replaceChildren(); container.hidden = !warnings.length;
+  document.querySelectorAll('.mapping-select').forEach(select => {
+    select.classList.remove('needs-review'); select.removeAttribute('aria-describedby');
+  });
+  warnings.forEach((warning, index) => {
+    const card = text('div', '', 'mapping-warning'); card.id = `mapping-warning-${index}`;
+    card.append(text('strong', warning.message));
+    if (warning.action) card.append(text('p', warning.action));
+    const actions = text('div', '', 'warning-actions');
+    (warning.fields || []).forEach(field => {
+      const select = $(`mapping-${field}`);
+      if (!select) return;
+      select.classList.add('needs-review');
+      select.setAttribute('aria-describedby', `${select.getAttribute('aria-describedby') || ''} ${card.id}`.trim());
+      const button = text('button', `Review ${fieldLabel(field)}`, 'text-button'); button.type = 'button'; button.disabled = state.busy;
+      button.addEventListener('click', () => {
+        if (!requiredFields.includes(field)) $('optional-fields').open = true;
+        select.focus({preventScroll: true}); select.scrollIntoView({behavior: 'smooth', block: 'center'});
+      });
+      actions.append(button);
+    });
+    card.append(actions); container.append(card);
+  });
+}
+
 function refreshControls() {
   document.querySelectorAll('[data-step]').forEach(button => {
     const step = Number(button.dataset.step);
@@ -41,13 +100,77 @@ function refreshControls() {
     if (step === state.step) button.setAttribute('aria-current', 'step'); else button.removeAttribute('aria-current');
   });
   document.querySelectorAll('.sample-button, .mapping-select, #file-input, #change-file, #edit-mapping, #confirm-mapping, #suggest-button, #export-issues, #export-normalized').forEach(button => button.disabled = state.busy);
-  const missing = ['sku', 'name', 'regular_price'].filter(field => !state.mapping[field]);
+  const missing = requiredFields.filter(field => !state.mapping[field]);
   const mapped = Object.values(state.mapping).filter(Boolean);
   const duplicate = new Set(mapped).size !== mapped.length;
   $('check-button').disabled = state.busy || !$('confirm-mapping').checked || missing.length > 0 || duplicate;
-  $('confirmation-help').textContent = missing.length ? `Map ${missing.map(field => fields.find(item => item[0] === field)[1]).join(', ')} to enable checking.` : duplicate ? 'Each source column can be mapped only once. Review the repeated selections.' : 'Unmapped source columns are omitted. Mapped values are never guessed or filled in.';
+  const conflict = currentColumnConflicts()[0];
+  $('confirmation-help').textContent = conflict ? `"${conflict[0]}" is selected for ${conflict[1].map(fieldLabel).join(' and ')}. Use it only once.` : missing.length ? `Select columns for ${missing.map(fieldLabel).join(', ')} to continue.` : 'Only selected fields will be checked.';
+  renderMappingWarnings();
   document.body.classList.toggle('busy', state.busy);
   $('drop-zone').setAttribute('aria-disabled', String(state.busy));
+  renderConnection();
+}
+
+function apiHost(base) {
+  try { return new URL(base).host || 'your selected service'; }
+  catch { return 'your selected service'; }
+}
+
+function settingsFeedback(message, error = false) {
+  $('settings-feedback').textContent = message;
+  $('settings-feedback').hidden = !message;
+  $('settings-feedback').classList.toggle('error', error);
+}
+
+function renderConnection() {
+  const remote = state.connection.mode === 'api';
+  const ready = remote || !!state.status?.model?.ready;
+  $('model-status').classList.toggle('ready', ready);
+  $('model-status').classList.toggle('offline', !ready);
+  $('model-status-text').textContent = remote ? 'API service selected' : ready ? 'Local AI ready' : 'Local AI offline';
+  $('model-status').title = remote ? `${state.connection.model} · ${apiHost(state.connection.base_url)}` : state.status?.model?.message || '';
+  $('inference-destination').textContent = remote ? `AI suggestions send column names and up to 3 short sample values per column to ${apiHost(state.connection.base_url)}. The full CSV stays on this computer.` : 'Local mode: column samples stay on this computer.';
+  $('privacy-summary').textContent = remote ? `API mode: column samples go to ${apiHost(state.connection.base_url)}. Your source file stays unchanged.` : 'Local mode: your data stays on this computer. Your source file stays unchanged.';
+  const apiSelected = $('source-api').checked;
+  $('local-settings').hidden = apiSelected; $('api-settings').hidden = !apiSelected;
+  const runtime = state.status?.runtime || {};
+  $('local-setup-status').textContent = runtime.busy || runtime.phase === 'error' ? runtime.message : state.status?.model?.ready ? 'Local AI is ready. Choose Use local model to keep all samples on this computer.' : runtime.installed ? 'Model files are installed. Click Start local AI.' : 'The model is not installed. Use the setup button below, or choose API service.';
+  $('start-local-model').textContent = runtime.busy ? (runtime.phase === 'downloading' ? 'Downloading…' : 'Starting…') : runtime.installed ? 'Start local AI' : 'Set up & start local AI (~672 MB)';
+  $('start-local-model').disabled = state.busy || !!runtime.busy || runtime.supported === false || !!state.status?.model?.ready;
+  document.querySelectorAll('#ai-settings input, #ai-settings select, #use-local-model, #test-use-api, #forget-api, #check-local-model, #open-ai-settings').forEach(input => input.disabled = state.busy);
+  $('api-consent-label').textContent = `Allow column names and up to 3 short sample values per column to be sent to ${apiHost($('api-base-url').value)} when I request AI suggestions.`;
+}
+
+async function refreshLocalStatus() {
+  state.status = await (await api('/api/status')).json();
+  renderConnection(); renderEngine();
+}
+
+let localPollTimer = null;
+function followLocalStartup() {
+  if (localPollTimer !== null) return;
+  localPollTimer = setTimeout(async () => {
+    localPollTimer = null;
+    try {
+      await refreshLocalStatus();
+      if (state.status?.runtime?.busy) followLocalStartup();
+    } catch { settingsFeedback('Could not refresh local setup status. Check that the app is still running.', true); }
+  }, 1800);
+}
+
+function openSettings() {
+  $('source-local').checked = state.connection.mode === 'local';
+  $('source-api').checked = state.connection.mode === 'api';
+  settingsFeedback(''); renderConnection(); $('ai-settings').showModal();
+}
+
+async function settingsAction(button, label, action) {
+  settingsFeedback('');
+  await perform(button, label, async () => {
+    try { await action(); }
+    catch (error) { settingsFeedback(error.message || 'Connection failed.', true); }
+  });
 }
 
 async function perform(button, loading, action) {
@@ -73,8 +196,8 @@ function setStep(step) {
 function renderPreview() {
   const { headers, preview, row_count } = state.profile;
   document.querySelectorAll('.source-name').forEach(node => node.textContent = state.filename);
-  document.querySelectorAll('.source-detail').forEach(node => node.textContent = `${row_count.toLocaleString()} records · ${headers.length} source columns · Original values preserved`);
-  $('preview-caption').textContent = `First ${Math.min(preview.length, 5)} of ${row_count.toLocaleString()} records`;
+  document.querySelectorAll('.source-detail').forEach(node => node.textContent = `${row_count.toLocaleString()} rows · ${headers.length} columns`);
+  $('preview-caption').textContent = `First ${Math.min(preview.length, 5)} rows`;
   const table = document.createElement('table');
   const head = document.createElement('thead');
   const tr = document.createElement('tr');
@@ -92,53 +215,62 @@ function renderPreview() {
 }
 
 function renderEngine() {
+  $('engine-banner').title = '';
   if (state.engine) {
-    const isModel = state.engine.kind === 'open_model';
-    $('engine-title').textContent = isModel ? `Open-model suggestions · ${state.engine.name}` : `Rule-based suggestions · ${state.engine.name || 'Header matching'}`;
-    const elapsed = Number.isFinite(state.engine.elapsed_ms) ? ` Completed in ${(state.engine.elapsed_ms / 1000).toFixed(1)}s.` : '';
-    $('engine-description').textContent = (isModel ? 'The model proposed the mappings below. Check the source preview and adjust anything that needs context.' : 'These are deterministic header matches, not AI output. Review the proposed fields or select columns manually.') + elapsed;
-  } else if (state.status?.model && !state.status.model.ready) {
-    $('engine-title').textContent = 'Open model unavailable · Manual mapping is available';
-    $('engine-description').textContent = `${state.status.model.message || 'The configured model is not connected.'} You can select each source column yourself.`;
+    const isModel = ['open_model', 'api_model'].includes(state.engine.kind);
+    const origin = state.engine.kind === 'api_model' ? `API: ${state.engine.name}` : 'Local AI';
+    $('engine-title').textContent = isModel ? `${origin} suggestions ready — review the selections` : 'Column suggestions ready';
+    const elapsed = Number.isFinite(state.engine.elapsed_ms) ? ` Took ${(state.engine.elapsed_ms / 1000).toFixed(1)} s.` : '';
+    $('engine-description').textContent = (isModel ? 'Review any flagged selections and check the example values. AI suggestions can still be wrong.' : 'Review the suggested columns against the example values.') + elapsed;
+    $('engine-banner').title = isModel ? `Model: ${state.engine.name}` : '';
+  } else if (state.connection.mode === 'local' && state.status?.model && !state.status.model.ready) {
+    $('engine-title').textContent = 'Local AI is offline';
+    $('engine-description').textContent = 'Open AI settings to start it or connect an API service. You can also select columns yourself.';
   } else {
-    $('engine-title').textContent = 'Your review, assisted by an open model';
-    $('engine-description').textContent = 'Choose “Suggest field mappings” to analyze the headers and sample values. You can also map the fields manually.';
+    $('engine-title').textContent = 'Choose columns yourself or use AI';
+    $('engine-description').textContent = 'Check each selection against the example values.';
   }
 }
 
 function renderMapping() {
   const container = $('mapping-fields'); container.replaceChildren();
+  const optional = $('optional-mapping-fields'); optional.replaceChildren();
   fields.forEach(([field, label, description]) => {
+    const required = requiredFields.includes(field);
     const row = text('div', '', 'mapping-row');
     const fieldInfo = document.createElement('div');
-    const name = text('label', label + (['sku', 'name', 'regular_price'].includes(field) ? ' *' : ''), 'field-title'); name.htmlFor = `mapping-${field}`;
+    const name = text('label', label, 'field-title'); name.htmlFor = `mapping-${field}`;
     fieldInfo.append(name, text('span', description, 'field-description'));
     const select = document.createElement('select'); select.id = `mapping-${field}`; select.className = 'mapping-select';
-    const empty = text('option', 'Not mapped'); empty.value = ''; select.append(empty);
+    const empty = text('option', required ? 'Choose a column' : 'Not provided'); empty.value = ''; select.append(empty);
     state.profile.headers.forEach(header => { const option = text('option', header); option.value = header; select.append(option); });
     select.value = state.mapping[field] || ''; select.classList.toggle('unmapped', !select.value);
     const note = text('div', '', 'mapping-note');
-    const suggestion = state.suggestions.find(item => item.field === field);
-    if (state.manual.has(field)) note.append(text('span', 'YOUR SELECTION', 'manual-note'));
-    note.append(text('span', suggestion?.reason || (select.value ? 'Review this field against the source values.' : 'Select a source column, or leave this field out.')));
+    const values = state.profile.column_samples?.[select.value] || [];
+    note.append(text('span', select.value ? (values.length ? values.slice(0, 2).map(value => String(value).length > 65 ? String(value).slice(0, 65) + '…' : value).join(' · ') : 'All sampled cells are blank') : (required ? 'Select a column to see its values' : 'This field will not be checked')));
+    if (state.manual.has(field)) note.append(text('small', 'Your selection'));
+    else if (state.engine && select.value) note.append(text('small', ['open_model', 'api_model'].includes(state.engine.kind) ? 'AI suggestion' : 'Suggested match'));
     select.addEventListener('change', () => {
       state.mapping[field] = select.value || null;
       state.manual.add(field); state.report = null;
       $('confirm-mapping').checked = false;
       renderMapping(); refreshControls(); $(`mapping-${field}`).focus();
     });
-    row.append(fieldInfo, select, note); container.append(row);
+    row.append(fieldInfo, select, note); (required ? container : optional).append(row);
   });
+  const selectedOptional = fields.filter(([field]) => !requiredFields.includes(field) && state.mapping[field]).length;
+  $('optional-count').textContent = `(${selectedOptional} of 7 selected)`;
+  $('type-assumption').hidden = !!state.mapping.product_type;
   renderEngine();
 }
 
 async function loadCsv(csv, filename) {
   const profile = await (await api('/api/profile', { csv })).json();
   state.csv = csv; state.filename = filename; state.profile = profile;
-  state.mapping = {}; state.suggestions = []; state.manual = new Set(); state.engine = null; state.report = null;
+  state.mapping = {}; state.suggestions = []; state.mappingWarnings = []; state.manual = new Set(); state.engine = null; state.report = null;
   $('confirm-mapping').checked = false; $('mapping-warnings').hidden = true;
+  $('optional-fields').open = false;
   renderPreview(); renderMapping(); setStep(1);
-  notice(`${filename} is ready. Suggest or select the field mappings, then confirm them to run the checks.`, 'success');
 }
 
 async function readFile(file) {
@@ -163,10 +295,10 @@ function renderReport() {
   $('findings-count').textContent = filtered.length;
   $('empty-findings').hidden = filtered.length > 0;
   $('findings-table').hidden = !filtered.length;
-  $('empty-description').textContent = issues.length ? 'There are no findings matching this filter. Choose another view to see the rest.' : 'The checks did not find any issues in the mapped fields. Unmapped fields were not checked.';
+  $('empty-description').textContent = issues.length ? 'No issues match this filter.' : 'No issues found in the selected fields. Other fields were not checked.';
   const table = document.createElement('table');
   const head = document.createElement('thead'); const heading = document.createElement('tr');
-  ['ROW', 'SKU', 'LEVEL', 'FINDING'].forEach(label => heading.append(text('th', label))); head.append(heading); table.append(head);
+  ['Row', 'SKU', 'Level', 'Issue'].forEach(label => heading.append(text('th', label))); head.append(heading); table.append(head);
   const body = document.createElement('tbody');
   filtered.forEach(issue => {
     const row = document.createElement('tr');
@@ -191,7 +323,7 @@ async function exportCsv(kind, button) {
     const suppliedName = disposition.match(/filename="?([^";]+)"?/i)?.[1];
     link.download = suppliedName || `${state.filename.replace(/\.csv$/i, '')}-${kind}.csv`;
     document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
-    notice(`${kind === 'issues' ? 'Findings report' : 'Normalized catalog'} downloaded. Formula-like text is escaped; import SKU and barcode columns as text to retain leading zeros.`, 'success');
+    notice(`${kind === 'issues' ? 'Issue report' : 'Mapped CSV'} downloaded. In Excel, import SKU and barcode columns as text to keep leading zeros.`, 'success');
   });
 }
 
@@ -213,47 +345,88 @@ $('drop-zone').addEventListener('drop', event => {
   if (!/\.csv$/i.test(file.name)) return notice('Please choose a CSV file.', 'error');
   perform(null, '', async () => { await readFile(file); });
 });
-$('suggest-button').addEventListener('click', event => perform(event.currentTarget, 'Reading the fields…', async () => {
-  const result = await (await api('/api/map', { csv: state.csv })).json();
+$('suggest-button').addEventListener('click', event => perform(event.currentTarget, 'Matching columns…', async () => {
+  if (state.connection.mode === 'local' && !state.status?.model?.ready) {
+    openSettings(); settingsFeedback('Start local AI or choose API service to get suggestions.'); return;
+  }
+  const result = await (await api('/api/map', { csv: state.csv, connection: state.connection })).json();
   state.mapping = result.mapping || {}; state.suggestions = result.suggestions || []; state.engine = result.engine; state.manual = new Set(); state.report = null;
   $('confirm-mapping').checked = false;
-  $('mapping-warnings').replaceChildren(...(result.warnings || []).map(warning => text('p', typeof warning === 'string' ? warning : JSON.stringify(warning))));
-  $('mapping-warnings').hidden = !(result.warnings || []).length;
+  state.mappingWarnings = result.warnings || [];
   renderMapping();
-  notice(state.engine?.kind === 'open_model' ? 'Model suggestions are ready. Review the mappings before running the checks.' : 'Rule-based suggestions are ready. These were not generated by an AI model.', 'success');
+  $('optional-fields').open = true;
 }));
-$('check-button').addEventListener('click', event => perform(event.currentTarget, 'Checking the catalog…', async () => {
+$('check-button').addEventListener('click', event => perform(event.currentTarget, 'Checking…', async () => {
   state.report = await (await api('/api/check', { csv: state.csv, mapping: state.mapping, options: {} })).json();
   state.filter = 'all'; renderReport(); setStep(2);
-  notice(`Review complete: ${state.report.summary.error_count} errors and ${state.report.summary.warning_count} warnings.`, 'success');
 }));
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; renderReport(); }));
 $('export-issues').addEventListener('click', event => exportCsv('issues', event.currentTarget));
 $('export-normalized').addEventListener('click', event => exportCsv('normalized', event.currentTarget));
+
+$('open-ai-settings').addEventListener('click', openSettings);
+$('close-ai-settings').addEventListener('click', () => $('ai-settings').close());
+document.querySelectorAll('[name="ai-source"]').forEach(input => input.addEventListener('change', () => { settingsFeedback(''); renderConnection(); }));
+$('api-preset').addEventListener('change', () => {
+  const presets = {deepseek: ['https://api.deepseek.com', 'deepseek-flash'], openrouter: ['https://openrouter.ai/api/v1', '']};
+  const preset = presets[$('api-preset').value];
+  if (preset) { $('api-base-url').value = preset[0]; $('api-model').value = preset[1]; }
+  $('api-key').value = ''; $('api-consent').checked = false; settingsFeedback(''); renderConnection();
+});
+['api-base-url', 'api-model', 'api-key', 'api-format'].forEach(id => $(id).addEventListener('input', () => {
+  $('api-consent').checked = false; settingsFeedback(''); renderConnection();
+}));
+$('test-use-api').addEventListener('click', event => settingsAction(event.currentTarget, 'Testing…', async () => {
+  if (!$('api-consent').checked) throw new Error('Confirm where column samples will be sent before using this API.');
+  const connection = {mode: 'api', base_url: $('api-base-url').value.trim().replace(/\/+$/, '').replace(/\/chat\/completions$/, ''), model: $('api-model').value.trim(), api_key: $('api-key').value.trim(), format: $('api-format').value};
+  const result = await (await api('/api/model/test', {connection})).json();
+  state.connection = connection;
+  settingsFeedback(`API selected: ${result.engine.name}. ${result.message}`);
+  renderEngine();
+}));
+$('use-local-model').addEventListener('click', () => {
+  state.connection = {mode: 'local'}; renderConnection(); renderEngine(); $('ai-settings').close();
+});
+$('forget-api').addEventListener('click', () => {
+  ['api-base-url', 'api-model', 'api-key'].forEach(id => $(id).value = '');
+  $('api-preset').value = 'custom'; $('api-format').value = 'json'; $('api-consent').checked = false;
+  state.connection = {mode: 'local'};
+  renderConnection(); renderEngine(); settingsFeedback('API settings cleared. Local mode is selected.');
+});
+$('check-local-model').addEventListener('click', event => settingsAction(event.currentTarget, 'Checking…', refreshLocalStatus));
+$('start-local-model').addEventListener('click', event => settingsAction(event.currentTarget, 'Starting…', async () => {
+  state.status ||= {};
+  state.status.runtime = await (await api('/api/model/start', {install: !state.status?.runtime?.installed, cpu: $('local-cpu').checked})).json();
+  state.connection = {mode: 'local'}; followLocalStartup(); renderEngine();
+}));
 
 async function initialize() {
   try {
     state.status = await (await api('/api/status')).json();
     const { model, samples } = state.status;
     $('model-status').classList.add(model.ready ? 'ready' : 'offline');
-    $('model-status-text').textContent = model.ready ? `${model.name} · connected` : 'Model offline · manual review available';
-    $('model-status').title = model.message || model.backend || '';
-    $('footer-model').textContent = model.ready ? `${model.backend} · ${model.name}` : 'Local catalog review';
+    $('model-status-text').textContent = model.ready ? 'Local AI ready' : 'AI offline · manual matching available';
+    $('model-status').title = `${model.name} · ${model.message || model.backend || ''}`;
+    $('footer-model').textContent = '';
+    if (state.status.runtime?.busy) followLocalStartup();
+    $('featured-sample').replaceChildren();
     $('sample-list').replaceChildren();
-    (samples || []).forEach((sample, index) => {
+    (samples || []).forEach(sample => {
       const button = text('button', '', 'sample-button'); button.type = 'button';
-      button.append(text('span', `SAMPLE ${String(index + 1).padStart(2, '0')}`, 'sample-index'), text('strong', sample.name), text('p', sample.description), text('span', '↗', 'sample-arrow'));
+      const featured = sample.id === 'supplier-demo';
+      button.append(text('strong', featured ? 'Load sample with errors' : sample.name), text('p', featured ? '10 fictional products with missing prices, duplicate SKUs and conflicts.' : sample.description));
       button.addEventListener('click', () => perform(button, 'Opening sample…', async () => {
         const result = await (await api(`/api/samples/${encodeURIComponent(sample.id)}`)).json();
         await loadCsv(result.csv, result.filename);
       }));
-      $('sample-list').append(button);
+      $(featured ? 'featured-sample' : 'sample-list').append(button);
     });
-    if (!(samples || []).length) $('sample-list').append(text('div', 'No bundled samples are available. Choose your own CSV to begin.', 'sample-placeholder'));
+    $('more-samples').hidden = !(samples || []).some(sample => sample.id !== 'supplier-demo');
+    if (!(samples || []).length) $('featured-sample').append(text('p', 'No samples available. Upload a CSV to begin.', 'secondary'));
     renderEngine();
   } catch (error) {
     $('model-status-text').textContent = 'Connection unavailable';
-    $('sample-list').replaceChildren(text('div', 'Sample catalogs could not be loaded. Check that the local server is running, then refresh this page.', 'sample-placeholder'));
+    $('featured-sample').replaceChildren(text('p', 'Could not load samples. Check the local server and refresh this page.', 'secondary'));
     notice(error.message, 'error');
   }
   refreshControls();

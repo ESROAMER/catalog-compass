@@ -1,0 +1,11 @@
+Item ref,Display label,List amount,Deal amount,Money,Units available,GTIN,Kind
+00081,Canvas tote,24.00,,USD,12,0012345000011,simple
+00082,Desk tray,,,USD,7,0012345000028,simple
+00083,Steel bottle,32.00,,USD,20,0012345000035,simple
+00083,Steel bottle,39.00,,USD,20,0012345000035,simple
+00084,Notebook,8.00,,USD,14,0012345000042,simple
+00084,Notebook,8.00,,USD,14,0012345000042,simple
+00085,Cable pouch,18.00,22.00,USD,8,0012345000059,simple
+00086,Travel mug,26.00,,USD,four,0012345000066,simple
+00087,Pen set,0.00,,USD,2,0012345000073,simple
+00088,,14.00,,USD,10,0012345000080,simple

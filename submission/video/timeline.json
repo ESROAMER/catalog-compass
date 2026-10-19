@@ -1,0 +1,110 @@
+{
+  "duration_seconds": 144.827,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "fps": 24,
+  "voice": "Microsoft Zira Desktop",
+  "disclosure": "Edited walkthrough using real application captures and real local inference. Synthetic English narration. Fictional supplier data.",
+  "timeline": [
+    {
+      "scene": "01",
+      "title": "Review supplier CSVs before import",
+      "start": 0,
+      "end": 13.322,
+      "capture": "01-home.jpg"
+    },
+    {
+      "scene": "02",
+      "title": "A real open model runs locally",
+      "start": 13.322,
+      "end": 26.408,
+      "capture": "02-local-model.jpg"
+    },
+    {
+      "scene": "03",
+      "title": "Load a file and match its columns",
+      "start": 26.408,
+      "end": 38.19,
+      "capture": "03-columns-before.jpg"
+    },
+    {
+      "scene": "04",
+      "title": "AI suggests the meaning of each column",
+      "start": 38.19,
+      "end": 50.197,
+      "capture": "05-conflict-field.jpg"
+    },
+    {
+      "scene": "05",
+      "title": "A model mistake becomes a review task",
+      "start": 50.197,
+      "end": 60.789,
+      "capture": "05-conflict-field.jpg"
+    },
+    {
+      "scene": "06",
+      "title": "The reviewer resolves the conflict",
+      "start": 60.789,
+      "end": 72.911,
+      "capture": "06-corrected.jpg"
+    },
+    {
+      "scene": "07",
+      "title": "Confirm before checking",
+      "start": 72.911,
+      "end": 84.038,
+      "capture": "07-confirm.jpg"
+    },
+    {
+      "scene": "08",
+      "title": "See the rows that need attention",
+      "start": 84.038,
+      "end": 94.75,
+      "capture": "08-results.jpg"
+    },
+    {
+      "scene": "09",
+      "title": "Inspect conflicting source values",
+      "start": 94.75,
+      "end": 105.597,
+      "capture": "10-price-conflict.jpg"
+    },
+    {
+      "scene": "10",
+      "title": "Download a report for the handoff",
+      "start": 105.597,
+      "end": 116.184,
+      "capture": "11-export.jpg"
+    },
+    {
+      "scene": "11",
+      "title": "Or connect a compatible API",
+      "start": 116.184,
+      "end": 130.326,
+      "capture": "12-api-option.jpg"
+    },
+    {
+      "scene": "12",
+      "title": "A small tool for a concrete service",
+      "start": 130.326,
+      "end": 144.827,
+      "capture": null
+    }
+  ],
+  "capture_sha256": {
+    "01-home.jpg": "85575f56ff2eae76bc7fba0cd2c7ab9c85fe13d76f4579225fe7b78897c834ab",
+    "02-local-model.jpg": "65851f35df4c2c1496e5d15c402f0128b0e78c237a63f543686eae7aa25c3bad",
+    "03-columns-before.jpg": "25c7352f47916ebff0ac26e3fd8b41d70dcd9dec15f8fa97d43100489619694d",
+    "04-ai-review.jpg": "22ed682cf5bfa996ef57c16273b17d3efd2ac2a2ebe48576f6593d4e3708ca7d",
+    "05-conflict-field.jpg": "ed62bdf373bcfb37977ab20aecf5fd9431b9a2cd388a3a109d29239d4c8e4b33",
+    "06-corrected.jpg": "64fe9f116bca64de399772750f4e2132233fbd38dd1d4a8b0ac5e693d06ad0d1",
+    "07-confirm.jpg": "126dae8ccb7109f816a71243f170aae8b4351c609643830ed16ce836b0ecbd5d",
+    "08-results.jpg": "c19593c0e8e5a08e299037108e43f8fb7b87c329704f97267fd7951d8e218b06",
+    "09-errors.jpg": "a8c0505d9b6ffbafdbaa6497a806b245bcac2d977d41eb61ec2201717732fec2",
+    "10-price-conflict.jpg": "39ab655d389dedd0beb8111ff754b6164252ad1c6a30690fd1824c5e0b83f5a5",
+    "11-export.jpg": "ad7bf7756a892d29702135247be720bf71a8d7b975d1d286f114c63128f9e588",
+    "12-api-option.jpg": "e2a640048d1484b66eceb81882238c95e8cbc636e613cd9b0187d05334e189fd"
+  }
+}

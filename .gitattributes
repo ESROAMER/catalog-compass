@@ -3,3 +3,4 @@
 research/2026-10-15/samples/** -text
 *.zip -text
 *.jpg -text
+*.mp4 -text

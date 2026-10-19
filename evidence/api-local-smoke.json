@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-19",
+  "timezone": "Asia/Shanghai",
+  "method": "Observed browser UI actions against the running local application",
+  "app": "http://127.0.0.1:8765",
+  "local_startup": "Start local AI button started the already installed runtime and reached ready status",
+  "first_time_download": "Not repeated; existing verified model files were reused",
+  "local_inference": "Real Qwen model suggestions returned for the synthetic supplier sample",
+  "api_inference": {
+    "base_url": "http://127.0.0.1:8766/v1",
+    "model": "catalog-qwen",
+    "format": "schema",
+    "connection_test": "Passed with a fixed JSON test prompt",
+    "suggestions": "Real inference through the generic Chat Completions API adapter",
+    "observed_conflict": "Kind was assigned to Product type and Description; both suggestions were cleared",
+    "manual_review": "Product type set to Kind; Description left unselected",
+    "report": {"rows": 10, "errors": 4, "warnings": 6, "affected_rows": 9}
+  },
+  "settings_checks": {
+    "clear_settings_removed_key_and_endpoint": true,
+    "reload_removed_dummy_key_and_endpoint": true,
+    "deepseek_preset_filled_endpoint_and_model": true
+  },
+  "limits": [
+    "No remote paid provider was called with a real API key",
+    "API authentication, error redaction and redirect handling were verified with a local mock provider",
+    "These familiar fixtures are development checks, not model accuracy measurements"
+  ]
+}

@@ -6,4 +6,6 @@ node_modules/
 test-results/
 .env
 *.log
+.media-tools/
+submission/video/build/
 

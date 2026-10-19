@@ -1,0 +1,11 @@
+id,code,severity,row,field,sku,message,value
+issue-0001,missing_regular_price,error,3,regular_price,00082,Regular price is required for simple products.,
+issue-0002,sku_price_conflict,error,4,regular_price,00083,"The same SKU has different regular price values in records 4, 5 (USD). Confirm which value is correct.",32.00
+issue-0003,sku_price_conflict,error,5,regular_price,00083,"The same SKU has different regular price values in records 4, 5 (USD). Confirm which value is correct.",39.00
+issue-0004,duplicate_sku,warning,6,sku,00084,This SKU occurs more than once. No conflicting numeric prices within a currency or non-empty barcodes were detected for this record; review before importing.,00084
+issue-0005,duplicate_record,warning,7,sku,00084,This entire source record is identical to record 6; neither record was removed.,00084
+issue-0006,duplicate_sku,warning,7,sku,00084,This SKU occurs more than once. No conflicting numeric prices within a currency or non-empty barcodes were detected for this record; review before importing.,00084
+issue-0007,sale_above_regular,warning,8,sale_price,00085,Sale price exceeds regular price.,22.00
+issue-0008,invalid_stock,warning,9,stock,00086,"Stock must be a non-negative whole number, blank, or 'parent' for inherited stock.",four
+issue-0009,zero_price,warning,10,regular_price,00087,Price is zero; confirm that this product is free.,0.00
+issue-0010,missing_name,error,11,name,00088,Product name is missing.,
