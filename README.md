@@ -111,7 +111,7 @@ On October 19, before the submission deadline, optional API inference and one-cl
 
 API protocol tests use a local mock provider; no paid external provider has been tested with a real customer key. Provider-specific compatibility must therefore be checked with **Test & use API** before relying on it. Successful connection testing confirms access and JSON output, not mapping accuracy.
 
-The [submission materials](submission/README.md) include an English article draft and a narrated 1080p video walkthrough using real application captures. They are prepared locally, not published. The competition still requires a public repository, an accessible deployment or video link, and a published English DEV post. The deadline is October 19, 2026 at 14:59 China Standard Time. Any changes made after that deadline must be identified in this README before submission-related claims are updated.
+The [submission materials](submission/README.md) include an English article draft and a narrated 1080p video walkthrough using real application captures. The code and materials are publicly available in this repository, and the article contains links to the repository and MP4. The English DEV post has not yet been published, so the contest entry has not been submitted. The deadline is October 19, 2026 at 14:59 China Standard Time. Any changes made after that deadline must be identified in this README before submission-related claims are updated.
 
 ## License
 

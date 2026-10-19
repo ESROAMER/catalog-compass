@@ -20,7 +20,7 @@ The first paid service I would test is a fixed-scope review of one supplier file
 
 ## Demo
 
-[Watch the narrated walkthrough]({{DEMO_URL}}).
+[Watch or download the narrated walkthrough (MP4)](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4).
 
 The video uses real application captures and real local inference. It is edited for explanation, with synthetic English narration. Its ten-product supplier file is fictional and included with the project.
 
@@ -36,7 +36,7 @@ Those counts describe this fixture after the reviewed mapping. One row can have 
 
 ## Code
 
-[Source code and setup instructions]({{REPOSITORY_URL}}).
+[Source code and setup instructions](https://github.com/ESROAMER/catalog-compass).
 
 I started the repository on October 15, 2026, during this challenge. The application code and fictional demo data use the MIT license. Public WooCommerce and CrossPeak fixtures retain their licenses and recorded source hashes in the repository.
 

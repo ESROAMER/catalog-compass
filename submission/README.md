@@ -1,6 +1,6 @@
 # Catalog Compass 投稿材料
 
-本目录为可审阅的投稿素材，尚未发布到 DEV、视频平台或公开代码仓库。
+代码、英文文章草稿和演示视频已公开在 [GitHub 仓库](https://github.com/ESROAMER/catalog-compass)。英文文章尚未发布到 DEV。
 
 - `article.en.md`：约 1,300 词的英文文章，保留官方模板主要栏目及必需标签。
 - `index.html`：本地阅读预览，可同时播放视频。
@@ -15,10 +15,9 @@
 
 ## 投稿前完成
 
-1. 将项目发布到公开代码仓库，并将文章中的 `{{REPOSITORY_URL}}` 替换为仓库地址。
-2. 将 MP4 上传到能公开访问的视频地址，替换 `{{DEMO_URL}}`。必要时换成 DEV 支持的视频嵌入格式。
-3. 使用 [本期投稿模板](https://dev.to/challenges/hacktoberfest-week2-2026-10-12) 发布英文文章，保留 `devchallenge` 和 `hf26challenge` 标签。
-4. 检查未登录的访客能够访问代码、视频和文章。北京时间截止时间为 **2026 年 10 月 19 日 14:59**。
+1. 文章已经填入公开仓库和 [MP4 文件](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)链接。GitHub 页面提供下载；如希望在 DEV 内直接播放，可另行上传到支持嵌入的视频平台，再替换演示链接。
+2. 使用 [本期投稿模板](https://dev.to/challenges/hacktoberfest-week2-2026-10-12) 发布英文文章，保留 `devchallenge` 和 `hf26challenge` 标签。
+3. 检查未登录的访客能够访问代码、视频和文章。北京时间截止时间为 **2026 年 10 月 19 日 14:59**。
 
 材料没有声称已有付费客户、已获得独立准确率或时间节省数据，也没有申报未使用的合作伙伴奖项。AI 辅助开发及合成解说已披露。
 
