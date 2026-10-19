@@ -1,7 +1,7 @@
 ---
 title: Catalog Compass helps freelancers review supplier CSVs with local AI
-published: false
-tags: devchallenge, hf26challenge, opensource, ai
+published: true
+tags: devchallenge, hf26challenge, opensource
 ---
 
 *This is a submission for the [Hacktoberfest Open-Source AI Challenge Week 2: Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).*

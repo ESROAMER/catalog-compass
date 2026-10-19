@@ -1,8 +1,8 @@
 # Catalog Compass 投稿材料
 
-代码、英文文章草稿和演示视频已公开在 [GitHub 仓库](https://github.com/ESROAMER/catalog-compass)。英文文章尚未发布到 DEV。
+代码、中英文文章和演示视频已公开在 [GitHub 仓库](https://github.com/ESROAMER/catalog-compass)。[英文参赛文章](https://dev.to/esroamer/catalog-compass-helps-freelancers-review-supplier-csvs-with-local-ai-1b6d)已于北京时间 **2026 年 10 月 19 日 13:11:44** 发布到 DEV。
 
-- `article.en.md`：英文文章草稿，保留官方模板主要栏目及必需标签。
+- `article.en.md`：已发布英文文章的源稿，保留官方模板主要栏目及必需标签。
 - `article.zh-CN.md`：与英文稿逐段对应的中文审阅稿，便于核对内容和提出修改意见。
 - `index.html`：本地阅读预览，可同时播放视频。
 - `video/catalog-compass-demo.mp4`：约 2 分 25 秒、1920×1080、24 fps，英文合成配音与内嵌字幕。
@@ -14,11 +14,11 @@
 
 视频是使用真实界面截图制作的讲解剪辑，并非连续操作录屏。实际运行了 Qwen3-0.6B，保留了模型将 `Kind` 同时分给 Product type 和 Description 的错误，以及人工修正。API 片段只展示接入设置，没有宣称实际调用了付费远程服务。画面中的模型耗时是该次运行的观察值，不是性能保证。
 
-## 投稿前完成
+## 发布记录
 
-1. 文章已经填入公开仓库和 [MP4 文件](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)链接。GitHub 页面提供下载；如希望在 DEV 内直接播放，可另行上传到支持嵌入的视频平台，再替换演示链接。
-2. 使用 [本期投稿模板](https://dev.to/challenges/hacktoberfest-week2-2026-10-12) 发布英文文章，保留 `devchallenge` 和 `hf26challenge` 标签。
-3. 检查未登录的访客能够访问代码、视频和文章。北京时间截止时间为 **2026 年 10 月 19 日 14:59**。
+1. DEV 作者账号：`esroamer`（HTZhao）。文章包含官方模板栏目，以及 `devchallenge`、`hf26challenge` 和 `opensource` 标签。
+2. 文章提供公开仓库和 [MP4 文件](https://github.com/ESROAMER/catalog-compass/blob/master/submission/video/catalog-compass-demo.mp4)链接，并标注为 AI-assisted。
+3. DEV 页面记录的发布时间为 `2026-10-19T05:11:44Z`，即北京时间 **13:11:44**，早于当天 **14:59** 的投稿截止时间。
 
 材料没有声称已有付费客户、已获得独立准确率或时间节省数据，也没有申报未使用的合作伙伴奖项。AI 辅助开发及合成解说已披露。
 

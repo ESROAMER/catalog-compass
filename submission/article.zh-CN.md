@@ -1,6 +1,6 @@
 # Catalog Compass 用本地 AI 帮助自由职业者检查供应商商品表
 
-*本文是 [Hacktoberfest 开源 AI 挑战赛第二周 Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12) 的参赛文章草稿。*
+*本文是 [Hacktoberfest 开源 AI 挑战赛第二周 Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12) 参赛文章的中文版本。*
 
 ## 我做了什么（What I Built）
 

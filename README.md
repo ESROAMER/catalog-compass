@@ -4,9 +4,9 @@ A small local workbench for reviewing supplier product CSVs before import.
 
 A local open-weight model, or a model from your chosen API service, suggests what unfamiliar columns mean. You confirm the mapping. Deterministic checks then identify missing prices, duplicate SKUs and conflicting records, with row-level evidence. The original file is never edited.
 
-[Watch the 2-minute 25-second demo (MP4)](submission/video/catalog-compass-demo.mp4) · [Read the English article draft](submission/article.en.md) · [Try the fictional supplier CSV](submission/demo-supplier.csv)
+[Watch the 2-minute 25-second demo (MP4)](submission/video/catalog-compass-demo.mp4) · [Read the published DEV article](https://dev.to/esroamer/catalog-compass-helps-freelancers-review-supplier-csvs-with-local-ai-1b6d) · [Read the Chinese version](submission/article.zh-CN.md) · [Try the fictional supplier CSV](submission/demo-supplier.csv)
 
-Built from scratch on October 15, 2026 for the Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle. This is an initial prototype, not a submitted contest entry.
+Built from scratch on October 15, 2026 for the Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle. The submission article was published on DEV on October 19, 2026 at 13:11 China Standard Time.
 
 ## Run locally
 
@@ -111,7 +111,7 @@ On October 19, before the submission deadline, optional API inference and one-cl
 
 API protocol tests use a local mock provider; no paid external provider has been tested with a real customer key. Provider-specific compatibility must therefore be checked with **Test & use API** before relying on it. Successful connection testing confirms access and JSON output, not mapping accuracy.
 
-The [submission materials](submission/README.md) include an English article draft and a narrated 1080p video walkthrough using real application captures. The code and materials are publicly available in this repository, and the article contains links to the repository and MP4. The English DEV post has not yet been published, so the contest entry has not been submitted. The deadline is October 19, 2026 at 14:59 China Standard Time. Any changes made after that deadline must be identified in this README before submission-related claims are updated.
+The [submission materials](submission/README.md) include the English article, its Chinese version, and a narrated 1080p video walkthrough using real application captures. The [DEV submission](https://dev.to/esroamer/catalog-compass-helps-freelancers-review-supplier-csvs-with-local-ai-1b6d) was published on October 19, 2026 at 13:11:44 China Standard Time (05:11:44 UTC), with the required `devchallenge` and `hf26challenge` tags and links to the repository and MP4. The submission deadline is October 19, 2026 at 14:59 China Standard Time. Any changes made after that deadline must be identified in this README before submission-related claims are updated.
 
 ## License
 
