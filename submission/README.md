@@ -2,7 +2,8 @@
 
 代码、英文文章草稿和演示视频已公开在 [GitHub 仓库](https://github.com/ESROAMER/catalog-compass)。英文文章尚未发布到 DEV。
 
-- `article.en.md`：约 1,300 词的英文文章，保留官方模板主要栏目及必需标签。
+- `article.en.md`：英文文章草稿，保留官方模板主要栏目及必需标签。
+- `article.zh-CN.md`：与英文稿逐段对应的中文审阅稿，便于核对内容和提出修改意见。
 - `index.html`：本地阅读预览，可同时播放视频。
 - `video/catalog-compass-demo.mp4`：约 2 分 25 秒、1920×1080、24 fps，英文合成配音与内嵌字幕。
 - `video/captions.en.srt`：独立字幕，便于视频平台使用。
